@@ -27,7 +27,7 @@ app.post('/tracks-update',function(req, res){
 			tracks: tracks
 		}));
 
-	}, 1000); //remove in future?
+	}, 100); //remove in future?
 	
 	// feel free to toggle which is left and which is right
 	if(tracks) {
@@ -45,8 +45,12 @@ app.post('/tracks-update',function(req, res){
 		// error on arduino side, lets just fix it here. Percentages of 0 will not register
 		// so, add 1 if we are zero
 		
-		speedMotorA++;
-		speedMotorB++;
+		if(speedMotorA <= 0) {
+			speedMotorA = 1;
+		}
+		if(speedMotorB <= 0) {
+			speedMotorB = 1;
+		}
 		
 		
 		
@@ -85,7 +89,5 @@ serialport.on('open', function(){
 });
 function sendMotorUpdate(motorId, speed, direction) {
 		serialport.write('{"id":"' + motorId + '","direction":"' + direction +'","speedPercentage":' + speed +'}');
-
-		// serialport.write('{"type":"motor","id":"' + motorId + '","direction":"' + direction + '","speedPercentage":' + speed + '}');	
 }
 

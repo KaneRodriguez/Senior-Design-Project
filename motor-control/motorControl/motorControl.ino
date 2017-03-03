@@ -23,8 +23,9 @@ void setup() {
     // reserve 200 bytes for the userCommand (consider lowering):
     userCommand.reserve(200);
     
-    Serial.println("Arduino set up! Sending initial data now: \n");
-        motorA.sendSerialMotorSpecs();
+    Serial.println("Arduino set up! \n");
+    
+    // motorA.sendSerialMotorSpecs();
         
     delay(3000);
     
@@ -85,8 +86,9 @@ void serialEvent() {
       userCommand.toCharArray(json, 200);
       
       if(commandReceived(json)) {
-        Serial.println("Command received");
+        Serial.println("CR");
         userCommand = ""; 
+        delay(100);
       } else {
         // Serial.println("Command not received");
       }

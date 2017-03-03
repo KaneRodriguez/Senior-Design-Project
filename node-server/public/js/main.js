@@ -8,10 +8,10 @@ var joystick	= new VirtualJoystick({
 	strokeStyle : 'blue',
 	baseStrokeStyle: 'red',
 	limitStickTravel: true,
-	stickRadius: 100,
-	stationaryBase: true,
-	baseX: x,
-	baseY: y
+	stickRadius: 100//,
+	//stationaryBase: true,
+	//baseX: x,
+	//baseY: y
 });
 
 setInterval(function(){

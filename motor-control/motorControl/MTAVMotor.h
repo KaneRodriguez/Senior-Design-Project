@@ -188,7 +188,7 @@ bool MTAVMotor::recieveSerialMotorUpdates(JsonObject& root) {
 
   this->setMotorDirection(direction);
   this->setMotorSpeedPercentage(speedPercentage);
-  this->sendSerialMotorSpecs();
+  // this->sendSerialMotorSpecs();
 
   return true;
 }
