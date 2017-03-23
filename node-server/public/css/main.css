@@ -1,20 +1,22 @@
-		body {
-			overflow	: hidden;
-			padding		: 0;
-			margin		: 0;
-			background-color: ;
-            color: dodgerblue;
-		}
-		#container {
-			width		: 100%;
-			height		: 100%;
-			overflow	: hidden;
-			padding		: 0;
-			margin		: 0;
-			-webkit-user-select	: none;
-			-moz-user-select	: none;
-		}
-        .motor-usage {
-            display: inline-block;
-            margin: 1em;
-        }
+body {
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+	background-color: #000;
+	color: dodgerblue;
+}
+
+#container {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+}
+
+.motor-usage {
+	display: inline-block;
+	margin: 1em;
+}
