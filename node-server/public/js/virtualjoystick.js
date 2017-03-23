@@ -1,7 +1,6 @@
-
 var VirtualJoystick	= function(opts)
 {
-	opts			= opts			|| {};
+	this.opts			= opts			|| {};
 	this._container		= opts.container	|| document.body;
 	this._strokeStyle	= opts.strokeStyle	|| 'cyan';
     this._baseStrokeStyle = opts.baseStrokeStyle || this._strokeStyle;
@@ -51,6 +50,7 @@ var VirtualJoystick	= function(opts)
 		this._container.addEventListener( 'mouseup'	, this._$onMouseUp	, false );
 		this._container.addEventListener( 'mousemove'	, this._$onMouseMove	, false );
 	}
+	this._init(this.opts);
 }
 
 VirtualJoystick.prototype.destroy	= function()
@@ -180,7 +180,7 @@ VirtualJoystick.prototype.left	= function(){
 VirtualJoystick.prototype._onUp	= function()
 {
 	this._pressed	= false; 
-	this._stickEl.style.display	= "none";
+	// this._stickEl.style.display	= "none";
 	
 	if(this._stationaryBase == false){	
 		this._baseEl.style.display	= "none";
@@ -354,12 +354,7 @@ VirtualJoystick.prototype._buildJoystickBase	= function()
 	canvas.height	= 126;
 	
 	var ctx		= canvas.getContext('2d');
-	ctx.beginPath(); 
-	ctx.strokeStyle = this._strokeStyle; 
-	ctx.lineWidth	= 6; 
-	ctx.arc( canvas.width/2, canvas.width/2, 40, 0, Math.PI*2, true); 
-	ctx.stroke();	
-
+		
 	ctx.beginPath(); 
 	ctx.strokeStyle	= this._baseStrokeStyle; 
 	ctx.lineWidth	= 2; 
@@ -386,6 +381,74 @@ VirtualJoystick.prototype._buildJoystickStick	= function()
 	return canvas;
 }
 
+// MTAV
+VirtualJoystick.prototype._changeColors	= function(base, stick)
+{
+	this.opts.baseStrokeStyle = base;
+	this.opts.strokeStyle = stick;
+	
+	var prevX = this._stickX;
+	var prevY = this._stickY;
+	
+	this.destroy();
+
+	this._init(this.opts);
+	
+}
+VirtualJoystick.prototype._init	= function(opts) {
+	opts			= opts			|| {};
+	this._container		= opts.container	|| document.body;
+	this._strokeStyle	= opts.strokeStyle	|| 'cyan';
+    this._baseStrokeStyle = opts.baseStrokeStyle || this._strokeStyle;
+	this._stickEl		= opts.stickElement	|| this._buildJoystickStick();
+	this._baseEl		= opts.baseElement	|| this._buildJoystickBase();
+	this._mouseSupport	= opts.mouseSupport !== undefined ? opts.mouseSupport : false;
+	this._stationaryBase	= opts.stationaryBase || false;
+	this._baseX		= this._stickX = opts.baseX || 0
+	this._baseY		= this._stickY = opts.baseY || 0
+	this._limitStickTravel	= opts.limitStickTravel || false
+	this._stickRadius	= opts.stickRadius !== undefined ? opts.stickRadius : 100
+	this._useCssTransform	= opts.useCssTransform !== undefined ? opts.useCssTransform : false
+
+	this._container.style.position	= "relative"
+
+	this._container.appendChild(this._baseEl)
+	this._baseEl.style.position	= "absolute"
+	this._baseEl.style.display	= "none"
+	this._container.appendChild(this._stickEl)
+	this._stickEl.style.position	= "absolute"
+	this._stickEl.style.display	= "none"
+
+	this._pressed	= false;
+	this._touchIdx	= null;
+	
+	if(this._stationaryBase === true){
+		this._baseEl.style.display	= "";
+		this._baseEl.style.left		= (this._baseX - this._baseEl.width /2)+"px";
+		this._baseEl.style.top		= (this._baseY - this._baseEl.height/2)+"px";
+	}
+    
+	this._transform	= this._useCssTransform ? this._getTransformProperty() : false;
+	this._has3d	= this._check3D();
+	
+	var __bind	= function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+	this._$onTouchStart	= __bind(this._onTouchStart	, this);
+	this._$onTouchEnd	= __bind(this._onTouchEnd	, this);
+	this._$onTouchMove	= __bind(this._onTouchMove	, this);
+	this._container.addEventListener( 'touchstart'	, this._$onTouchStart	, false );
+	this._container.addEventListener( 'touchend'	, this._$onTouchEnd	, false );
+	this._container.addEventListener( 'touchmove'	, this._$onTouchMove	, false );
+	if( this._mouseSupport ){
+		this._$onMouseDown	= __bind(this._onMouseDown	, this);
+		this._$onMouseUp	= __bind(this._onMouseUp	, this);
+		this._$onMouseMove	= __bind(this._onMouseMove	, this);
+		this._container.addEventListener( 'mousedown'	, this._$onMouseDown	, false );
+		this._container.addEventListener( 'mouseup'	, this._$onMouseUp	, false );
+		this._container.addEventListener( 'mousemove'	, this._$onMouseMove	, false );
+	}
+    this._onDown(this._baseX, this._baseY);
+	this._onUp();
+}
 //////////////////////////////////////////////////////////////////////////////////
 //		move using translate3d method with fallback to translate > 'top' and 'left'		
 //      modified from https://github.com/component/translate and dependents
@@ -493,4 +556,3 @@ VirtualJoystick.prototype._updateTracks = function() {
 		}
 	});
 }
-
