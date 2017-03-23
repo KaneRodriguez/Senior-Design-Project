@@ -27,6 +27,7 @@ setInterval(function(){
 
 $("#shutdown").on("click", function() {
 		//make the AJAX call (TODO: modal to confirm user request)
+	this.style.color = '#f00';
 	$.ajax({
 		url: '/shutdown',
 		type: 'POST',
