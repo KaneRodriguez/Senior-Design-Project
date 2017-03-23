@@ -546,7 +546,7 @@ VirtualJoystick.prototype._updateTracks = function() {
 		left: Math.floor(R), // dont ask why this works...
 		right: Math.floor(L)
 	};
-		console.log(tracks);
+		//console.log(tracks);
 	//make the AJAX call
 	$.ajax({
 		url: '/tracks-update',

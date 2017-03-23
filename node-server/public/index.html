@@ -1,4 +1,3 @@
-
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -10,17 +9,26 @@
 			#shutdown {
 				position: absolute;
 				bottom: 20%;
-				right: 48%;
+				left: 48%;
+				z-index: 10;
+				font-size: 400%;
+			}
+			
+			#slider {
+				position: absolute;
+				bottom: 10%;
+				left: 47.5%;
 				z-index: 10;
 				font-size: 4em;
-				color: #0f0
+				width: 5%
 			}
         </style>
 	</head>
 	<body>
 		<div id="container">
-		<span class="ion-power" id="shutdown"><i></i></span>
-		</div>                
+		</div>
+		<input type="range" id="slider" min=".4" max="1" step=".01" value="1">		
+		<span id="shutdown" class="ion-power"><i></i></span>
 		<script type="text/javascript" src="js/form-handler.js"></script>
 		<script src="./js/virtualjoystick.js"></script>
 		<script src="./js/main.js"></script>

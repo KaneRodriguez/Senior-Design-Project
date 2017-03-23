@@ -38,3 +38,11 @@ $("#shutdown").on("click", function() {
 		}
 	});
 });
+
+window.addEventListener("load", function() {
+	document.getElementById("shutdown").style.color = "#0f0";
+});
+
+document.getElementById('slider').addEventListener('input', function() {
+	document.body.style.opacity = this.value;
+});
