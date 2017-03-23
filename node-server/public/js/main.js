@@ -1,18 +1,19 @@
-
 var y = $(window).height() / 2;
 var x = $(window).width() / 2;
 
-var joystick	= new VirtualJoystick({
+var joystickOpts = {
 	container	: document.getElementById('container'),
 	mouseSupport	: true,
-	strokeStyle : 'blue',
-	baseStrokeStyle: 'red',
+	strokeStyle : '#0f0',
+	baseStrokeStyle: 'green',
 	limitStickTravel: true,
 	stickRadius: 100,
 	stationaryBase: true,
 	baseX: x,
 	baseY: y
-});
+};
+
+var joystick	= new VirtualJoystick(joystickOpts);
 
 // handle resizing of the window
 $(window).resize(function() {
@@ -27,7 +28,8 @@ setInterval(function(){
 
 $("#shutdown").on("click", function() {
 		//make the AJAX call (TODO: modal to confirm user request)
-	this.style.color = '#f00';
+    joystick._changeColors("#f00","#f00");
+	this.style.color = "#f00";
 	$.ajax({
 		url: '/shutdown',
 		type: 'POST',
