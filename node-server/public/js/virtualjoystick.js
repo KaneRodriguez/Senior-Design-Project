@@ -50,6 +50,8 @@ var VirtualJoystick	= function(opts)
 		this._container.addEventListener( 'mouseup'	, this._$onMouseUp	, false );
 		this._container.addEventListener( 'mousemove'	, this._$onMouseMove	, false );
 	}
+	
+	// mtav
 	this._init(this.opts);
 }
 
@@ -222,6 +224,23 @@ VirtualJoystick.prototype._onDown	= function(x, y)
 
 VirtualJoystick.prototype._onMove	= function(x, y)
 {
+	if( this._pressed == false ) 
+	{
+		var increments = 50;
+        var step = this._stickRadius / increments;
+		
+		var deltaX	= this.deltaX();
+		var deltaY	= this.deltaY();
+		
+		var dxSign = (deltaX >= 0 ? 1 : -1 );
+		var dySign = (deltaY >= 0 ? 1 : -1 );
+			
+		this._stickX = this._stickX - dxSign * step;
+		this._stickY = this._stickY - dySign * step;			
+		
+		this._move(this._stickEl.style, (this._stickX - this._stickEl.width /2), (this._stickY - this._stickEl.height/2));	
+	}
+
 	if( this._pressed === true ){
 		this._stickX	= x;
 		this._stickY	= y;
@@ -546,7 +565,7 @@ VirtualJoystick.prototype._updateTracks = function() {
 		left: Math.floor(R), // dont ask why this works...
 		right: Math.floor(L)
 	};
-		//console.log(tracks);
+	//	console.log(tracks);
 	//make the AJAX call
 	$.ajax({
 		url: '/tracks-update',
