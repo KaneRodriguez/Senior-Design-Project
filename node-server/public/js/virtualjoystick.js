@@ -67,7 +67,7 @@ VirtualJoystick.prototype.destroy	= function()
 		this._container.removeEventListener( 'mousemove'	, this._$onMouseMove	, false );
 	}
 }
-
+ 
 /**
  * @returns {Boolean} true if touchscreen is currently available, false otherwise
 */
@@ -146,7 +146,37 @@ VirtualJoystick.prototype.left	= function(){
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
-
+/*******************************?
+ * MTAV!
+ * **************/
+ 
+ VirtualJoystick.prototype._resetStationaryBase	= function()
+{
+	// deltaX = this._stickX - this._baseX;
+	
+	var dx = this.deltaX();
+	var dy = this.deltaY();
+	
+	if(this._stationaryBase === true){
+		this._baseEl.style.display	= "";
+		this._baseEl.style.left		= (this._baseX - this._baseEl.width /2)+"px";
+		this._baseEl.style.top		= (this._baseY - this._baseEl.height/2)+"px";
+	}
+	
+	// adjust the stick too
+	// this._stickX = deltaX + this._baseX
+	// this._stickX = dx + this._baseX;
+	// this._stickY = dy + this._baseY;
+	// adjusting stick based on screen change is a TODO!
+	
+	
+}
+ 
+ /*******************************?
+ * END MTAV!
+ * **************/
+ 
+ 
 VirtualJoystick.prototype._onUp	= function()
 {
 	this._pressed	= false; 
@@ -453,7 +483,7 @@ VirtualJoystick.prototype._updateTracks = function() {
 		left: Math.floor(R), // dont ask why this works...
 		right: Math.floor(L)
 	};
-		
+		console.log(tracks);
 	//make the AJAX call
 	$.ajax({
 		url: '/tracks-update',

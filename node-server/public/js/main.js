@@ -8,14 +8,30 @@ var joystick	= new VirtualJoystick({
 	strokeStyle : 'blue',
 	baseStrokeStyle: 'red',
 	limitStickTravel: true,
-	stickRadius: 100//,
-	//stationaryBase: true,
-	//baseX: x,
-	//baseY: y
+	stickRadius: 100,
+	stationaryBase: true,
+	baseX: x,
+	baseY: y
+});
+
+// handle resizing of the window
+$(window).resize(function() {
+	joystick._baseX = $(window).width() / 2;
+	joystick._baseY = $(window).height() / 2;
+	joystick._resetStationaryBase();
 });
 
 setInterval(function(){
 	joystick._updateTracks();
-}, 1000);
+}, 150);
 
- 
+$("#shutdown").on("click", function() {
+		//make the AJAX call (TODO: modal to confirm user request)
+	$.ajax({
+		url: '/shutdown',
+		type: 'POST',
+		data: {
+		shutdown: true
+		}
+	});
+});
