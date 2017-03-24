@@ -1,85 +1,91 @@
+<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<script src="./js/jquery-3.1.1.min.js"></script>
-       	<link rel="stylesheet" type="text/css" href="./css/main.css">
-		<link rel="stylesheet" type="text/css" href="./css/ionicons.min.css">
-		<link rel="stylesheet" type="text/css" href="./css/preloader.css">
-		<script src="./js/preloader.js"></script>
-        <style>
-			#home {
-				position: absolute;
-				z-index: 10;
-				font-size: 2.5em;
-				color: teal;
-				width: 2em;
-				height: 2em;
-			}
-			#shutdown {
-				position: absolute;
-				bottom: 5%;
-				left: 30.5%;
-				z-index: 10;
-				font-size: 2.5em;
-			}
-			
-			#slider {
-				position: absolute;
-				bottom: 10%;
-				left: 15%;
-				z-index: 10;
-				width: 2.5em;
-			}
-			#invert {
-				position: absolute;
-				bottom: 5%;
-				left: 30.5%;
-				z-index: 10;
-				font-size: 2.5em;
-			}
-        </style>
-	</head>
-	<body>
-	
+<head>
+	<meta charset="utf-8">
+	<meta content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+	<script src="./js/jquery-3.1.1.min.js">
+	</script>
+	<link href="./css/main.css" rel="stylesheet" type="text/css">
+	<link href="./css/ionicons.min.css" rel="stylesheet" type="text/css">
+	<link href="./css/preloader.css" rel="stylesheet" type="text/css">
+	<script src="./js/preloader.js">
+	</script>
+	<style>
+	           .osx-dock li a:not(.ionic) {
+	               position: absolute;
+	               z-index: 10;
+	               font-size: 2.5em;
+	               width: 2em;
+	               height: 2em;
+	           }
+	           #shutdown {
+	               position: absolute;
+	               left: 40%;
+	               bottom: -15%;
+	               z-index: 10;
+	               font-size: 2.5em;
+	           }
+	           #slider {
+	               position: absolute;
+	               bottom: 30%;
+	               left: -20%;
+	               z-index: 10;
+	               width: 4em;
+	               transform: rotate(270deg);
+	           }
+	           #invert {
+	               position: absolute;
+	               left: 40%;
+	               bottom: -15%;
+	               z-index: 10;
+	               font-size: 2.5em;
+	           }
+	</style>
+	<title></title>
+</head>
+<body>
 	<!-- preloader -->
 	<div id="wrap"></div>
 	<script>
-		var preloader = new MyPreloader({
-			baseColor: '#0f0',
-			ringColor: $("body").css("background")
-		});
-	</script>
-	<!-- end preloader -->
-
-		<div id="dockContainer">
-<div id="dockWrapper">
-<ul class="osx-dock">
-  <li class="active">
-    <a id="home" href="#" title=""><img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-4/256/home-icon.png" /></a>
-  </li>
-  <li>
-	<a id="shutdown" class="ion-power" href="#" title=""><i></i></a>
-  </li>
-
-   <li>
-    <a id="invert" class="ion-ios-lightbulb-outline" href="#" title=""><i></i></a>
-  </li>
-    <li>
-		<input type="range" id="slider" min=".4" max="1" step=".01" value="1">	
-	</li>
-</ul>
-  </div>
-</div>
-
-
-
-		<div id="container">
+	       var preloader = new MyPreloader({
+	           baseColor: '#0f0',
+	           ringColor: $("body").css("background")
+	       });
+	</script> <!-- end preloader -->
+	<div id="dockContainer">
+		<div id="dockWrapper">
+			<ul class="osx-dock">
+				<li class="active">
+					<a href="#" id="home" title=""><img src="images/home.png"></a>
+				</li>
+				<li>
+					<a href="#" id="steering" title=""><img src="images/steering.png"></a>
+				</li>
+				<li>
+					<a href="#" id="arm" title=""><img src="images/arm.png"></a>
+				</li>
+				<li>
+					<a href="#" id="camera" title=""><img src="images/camera.png"></a>
+				</li>
+				<li>
+					<a href="#" id="settings" title=""><img src="images/settings.png"></a>
+				</li>
+				<li>
+					<a class="ion-power ionic" href="#" id="shutdown" title=""><i></i></a>
+				</li>
+				<li>
+					<a class="ion-ios-lightbulb-outline ionic" href="#" id="invert" title=""><i></i></a>
+				</li>
+				<li><input id="slider" max="1" min=".4" step=".01" type="range" value="1"></li>
+			</ul>
 		</div>
-
-
-		<script type="text/javascript" src="js/form-handler.js"></script>
-		<script src="./js/virtualjoystick.js"></script>
-		<script src="./js/main.js"></script>
-	</body>
+	</div>
+	<div id="container"></div>
+	<script src="js/form-handler.js" type="text/javascript">
+	</script> 
+	<script src="./js/virtualjoystick.js">
+	</script> 
+	<script src="./js/main.js">
+	</script>
+</body>
 </html>
