@@ -8,10 +8,10 @@
         <style>
 			#shutdown {
 				position: absolute;
-				bottom: 20%;
-				left: 48%;
+				bottom: 5%;
+				left: 30.5%;
 				z-index: 10;
-				font-size: 400%;
+				font-size: 2.5em;
 			}
 			
 			#slider {
@@ -24,10 +24,10 @@
 			}
 			#invert {
 				position: absolute;
-				bottom: 70%;
-				left: 49.5%;
+				bottom: 5%;
+				left: 30.5%;
 				z-index: 10;
-				font-size: 2em;
+				font-size: 2.5em;
 			}
         </style>
 	</head>
@@ -35,50 +35,14 @@
 		<div id="dockContainer">
 <div id="dockWrapper">
 <ul class="osx-dock">
-  <li class="active">
-    <a href="#" title=""><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/151734/linkedin-icon.png" /></a>
-  </li>
+  <!--li class="active">
+    < a href="#" title=""><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/151734/linkedin-icon.png" /></a>
+  </li -->
   <li>
-    <a href="#" title=""><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/151734/facebook-icon.png" /></a>
+	<a id="shutdown" class="ion-power" href="#" title=""><i></i></a>
   </li>
-    <li>
-    <a href="#" title=""><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/151734/google-icon.png" /></a>
-  </li>
-    <li>
-    <a href="#" title=""><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/151734/chrome-icon.png" /></a>
-  </li>
-    <li>
-    <a href="#" title=""><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/151734/safari-icon.png" /></a>
-  </li>
-      <li>
-    <a href="#" title=""><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/151734/lastfm-icon.png" /></a>
-  </li>
-      <li>
-    <a href="#" title=""><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/151734/notable-icon.png" /></a>
-  </li>
-    <li>
-
-    <a href="#" title=""><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/151734/facebook-icon.png" /></a>
-  </li>
-    <li>
-
-    <a href="#" title=""><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/151734/google-icon.png" /></a>
-  </li>
-    <li>
-
-    <a href="#" title=""><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/151734/chrome-icon.png" /></a>
-  </li>
-    <li>
-
-    <a href="#" title=""><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/151734/safari-icon.png" /></a>
-  </li>
-      <li>
-
-    <a href="#" title=""><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/151734/lastfm-icon.png" /></a>
-  </li>
-      <li>
-
-    <a href="#" title=""><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/151734/notable-icon.png" /></a>
+   <li>
+    <a id="invert" class="ion-ios-lightbulb-outline" href="#" title=""><i></i></a>
   </li>
 </ul>
   </div>
@@ -86,8 +50,6 @@
 		<div id="container">
 		</div>
 		<input type="range" id="slider" min=".4" max="1" step=".01" value="1">		
-		<span id="shutdown" class="ion-power"><i></i></span>
-		<span id="invert" class="ion-ios-lightbulb-outline"><i></i></span>
 		<script type="text/javascript" src="js/form-handler.js"></script>
 		<script src="./js/virtualjoystick.js"></script>
 		<script src="./js/main.js"></script>
