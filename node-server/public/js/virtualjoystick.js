@@ -52,6 +52,10 @@ var VirtualJoystick	= function(opts)
 	}
 	
 	// mtav
+	this._tracks = {
+		left: 0,
+		right: 0
+	};
 	this._init(this.opts);
 }
 
@@ -153,9 +157,7 @@ VirtualJoystick.prototype.left	= function(){
  * **************/
  
  VirtualJoystick.prototype._resetStationaryBase	= function()
-{
-	// deltaX = this._stickX - this._baseX;
-	
+{	
 	var dx = this.deltaX();
 	var dy = this.deltaY();
 	
@@ -165,12 +167,7 @@ VirtualJoystick.prototype.left	= function(){
 		this._baseEl.style.top		= (this._baseY - this._baseEl.height/2)+"px";
 	}
 	
-	// adjust the stick too
-	// this._stickX = deltaX + this._baseX
-	// this._stickX = dx + this._baseX;
-	// this._stickY = dy + this._baseY;
-	// adjusting stick based on screen change is a TODO!
-	
+	this._moveBase(this._baseEl.style, (this._baseX - this._baseEl.width /2), (this._baseY - this._baseEl.height/2));
 	
 }
  
@@ -487,6 +484,20 @@ VirtualJoystick.prototype._move = function(style, x, y)
   }
 }
 
+VirtualJoystick.prototype._moveBase = function(style, x, y)
+{
+  if (this._transform) {
+    if (this._has3d) {
+      style[this._transform] = 'translate3d(' + x + 'px,' + y + 'px, 0)';
+    } else {
+      style[this._transform] = 'translate(' + x + 'px,' + y + 'px)';
+    }
+  } else {
+    style.left = x + 'px';
+    style.top = y + 'px';
+  }
+}
+
 VirtualJoystick.prototype._getTransformProperty = function() 
 {
     var styles = [
@@ -561,17 +572,22 @@ VirtualJoystick.prototype._updateTracks = function() {
 	var R = (V+W) /2;
 	var L = (V-W)/2;
 	
-	var tracks = {
-		left: Math.floor(R), // dont ask why this works...
-		right: Math.floor(L)
-	};
-	//	console.log(tracks);
-	//make the AJAX call
-	$.ajax({
-		url: '/tracks-update',
-		type: 'POST',
-		data: {
-		tracks: tracks
-		}
-	});
+	if( this._tracks.left != Math.floor(R) && this._tracks.right != Math.floor(L)) 
+	{
+		this._tracks = {
+			left: Math.floor(R), // dont ask why this works...
+			right: Math.floor(L)
+		};
+		
+		console.log(this._tracks);
+		//make the AJAX call
+		$.ajax({
+			url: '/tracks-update',
+			type: 'POST',
+			data: {
+			tracks: this._tracks
+			}
+		});	
+	}
+
 }
