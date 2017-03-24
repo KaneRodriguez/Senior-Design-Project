@@ -25,10 +25,15 @@ $(window).resize(function() {
 setInterval(function(){
 	joystick._updateTracks();
 }, 150);
+setInterval(function(){
+	joystick._stickInchBackToBase();
+}, 1);
+	
+
 
 $("#shutdown").on("click", function() {
 		//make the AJAX call (TODO: modal to confirm user request)
-    joystick._changeColors("#f00","#f00");
+    // joystick._changeColors("#f00","#f00");
 	this.style.color = "#f00";
 	$.ajax({
 		url: '/shutdown',
@@ -39,11 +44,6 @@ $("#shutdown").on("click", function() {
 	});
 });
 
-$("#invert").on("click", function() {
-	$("body").toggleClass("inverted");
-	$(this).toggleClass("ion-ios-lightbulb ion-ios-lightbulb-outline");
-});
-
 window.addEventListener("load", function() {
 	document.getElementById("shutdown").style.color = "#0f0";
 });
@@ -51,16 +51,3 @@ window.addEventListener("load", function() {
 document.getElementById('slider').addEventListener('input', function() {
 	document.body.style.opacity = this.value;
 });
-$(document).ready(function(){
- 			$("ul.osx-dock li").each(function (type) {
-		     	$(this).hover(function () {
-		      		$(this).prev("li").addClass("nearby");
-		      		$(this).next("li").addClass("nearby");
-		     	},
-		     	function () {
-		      		$(this).prev("li").removeClass("nearby");
-		      		$(this).next("li").removeClass("nearby");
-		     	});
-		    });
-		});
-		
