@@ -3,8 +3,10 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<script src="./js/jquery-3.1.1.min.js"></script>
-       		<link rel="stylesheet" type="text/css" href="./css/main.css">
+       	<link rel="stylesheet" type="text/css" href="./css/main.css">
 		<link rel="stylesheet" type="text/css" href="./css/ionicons.min.css">
+		<link rel="stylesheet" type="text/css" href="./css/preloader.css">
+		<script src="./js/preloader.js"></script>
         <style>
 			#home {
 				position: absolute;
@@ -39,6 +41,17 @@
         </style>
 	</head>
 	<body>
+	
+	<!-- preloader -->
+	<div id="wrap"></div>
+	<script>
+		var preloader = new MyPreloader({
+			baseColor: '#0f0',
+			ringColor: $("body").css("background")
+		});
+	</script>
+	<!-- end preloader -->
+
 		<div id="dockContainer">
 <div id="dockWrapper">
 <ul class="osx-dock">
@@ -58,8 +71,13 @@
 </ul>
   </div>
 </div>
+
+
+
 		<div id="container">
 		</div>
+
+
 		<script type="text/javascript" src="js/form-handler.js"></script>
 		<script src="./js/virtualjoystick.js"></script>
 		<script src="./js/main.js"></script>

@@ -15,6 +15,11 @@ var joystickOpts = {
 
 var joystick	= new VirtualJoystick(joystickOpts);
 
+
+
+
+
+
 // handle resizing of the window
 $(window).resize(function() {
 	joystick._baseX = $(window).width() / 2;
@@ -26,6 +31,17 @@ setInterval(function(){
 	joystick._updateTracks();
 }, 150);
 setInterval(function(){
+	
+	// joystick and preloader melody
+	joystick._tracks;
+	
+	if(joystick._tracks.left > 50) {
+		preloader._start();
+		console.log(joystick._tracks);
+	}
+	
+	
+	
 	joystick._stickInchBackToBase();
 }, 1);
 	
