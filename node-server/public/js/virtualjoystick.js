@@ -221,22 +221,6 @@ VirtualJoystick.prototype._onDown	= function(x, y)
 
 VirtualJoystick.prototype._onMove	= function(x, y)
 {
-	if( this._pressed == false ) 
-	{
-		var increments = 50;
-        var step = this._stickRadius / increments;
-		
-		var deltaX	= this.deltaX();
-		var deltaY	= this.deltaY();
-		
-		var dxSign = (deltaX >= 0 ? 1 : -1 );
-		var dySign = (deltaY >= 0 ? 1 : -1 );
-			
-		this._stickX = this._stickX - dxSign * step;
-		this._stickY = this._stickY - dySign * step;			
-		
-		this._move(this._stickEl.style, (this._stickX - this._stickEl.width /2), (this._stickY - this._stickEl.height/2));	
-	}
 
 	if( this._pressed === true ){
 		this._stickX	= x;
@@ -282,6 +266,30 @@ VirtualJoystick.prototype._onMouseMove	= function(event)
 	var x	= event.clientX;
 	var y	= event.clientY;
 	return this._onMove(x, y);
+}
+VirtualJoystick.prototype._stickInchBackToBase	= function(event) {
+	if( this._pressed == false ) 
+	{
+		var increments = 50;
+        var step = this._stickRadius / increments;
+		
+		var deltaX	= this.deltaX();
+		var deltaY	= this.deltaY();
+		
+		var dxSign = (deltaX >= 0 ? 1 : -1 );
+		var dySign = (deltaY >= 0 ? 1 : -1 );
+			
+		this._stickX = this._stickX - dxSign * step;
+		this._stickY = this._stickY - dySign * step;			
+		
+		if ( Math.sqrt( deltaX * deltaX + deltaY * deltaY ) < step )  {
+			this._stickX = this._baseX;
+			this._stickY = this._baseY;
+		}
+		
+		
+		this._move(this._stickEl.style, (this._stickX - this._stickEl.width /2), (this._stickY - this._stickEl.height/2));	
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////
