@@ -6,6 +6,14 @@
        		<link rel="stylesheet" type="text/css" href="./css/main.css">
 		<link rel="stylesheet" type="text/css" href="./css/ionicons.min.css">
         <style>
+			#home {
+				position: absolute;
+				z-index: 10;
+				font-size: 2.5em;
+				color: teal;
+				width: 2em;
+				height: 2em;
+			}
 			#shutdown {
 				position: absolute;
 				bottom: 5%;
@@ -17,10 +25,9 @@
 			#slider {
 				position: absolute;
 				bottom: 10%;
-				left: 47.5%;
+				left: 15%;
 				z-index: 10;
-				font-size: 4em;
-				width: 5%
+				width: 2.5em;
 			}
 			#invert {
 				position: absolute;
@@ -35,21 +42,24 @@
 		<div id="dockContainer">
 <div id="dockWrapper">
 <ul class="osx-dock">
-  <!--li class="active">
-    < a href="#" title=""><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/151734/linkedin-icon.png" /></a>
-  </li -->
+  <li class="active">
+    <a id="home" href="#" title=""><img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-4/256/home-icon.png" /></a>
+  </li>
   <li>
 	<a id="shutdown" class="ion-power" href="#" title=""><i></i></a>
   </li>
+
    <li>
     <a id="invert" class="ion-ios-lightbulb-outline" href="#" title=""><i></i></a>
   </li>
+    <li>
+		<input type="range" id="slider" min=".4" max="1" step=".01" value="1">	
+	</li>
 </ul>
   </div>
 </div>
 		<div id="container">
 		</div>
-		<input type="range" id="slider" min=".4" max="1" step=".01" value="1">		
 		<script type="text/javascript" src="js/form-handler.js"></script>
 		<script src="./js/virtualjoystick.js"></script>
 		<script src="./js/main.js"></script>

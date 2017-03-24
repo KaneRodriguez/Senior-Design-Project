@@ -33,7 +33,7 @@ setInterval(function(){
 
 $("#shutdown").on("click", function() {
 		//make the AJAX call (TODO: modal to confirm user request)
-    // joystick._changeColors("#f00","#f00");
+    joystick._changeColors("#f00","#f00");
 	this.style.color = "#f00";
 	$.ajax({
 		url: '/shutdown',
