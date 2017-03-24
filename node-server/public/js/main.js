@@ -1,6 +1,9 @@
 var beginY = $(window).height() / 2;
 var beginX = $(window).width() / 2;
 
+
+
+
 var joystickOpts = {
 	container	: document.getElementById('container'),
 	mouseSupport	: true,
@@ -12,6 +15,7 @@ var joystickOpts = {
 	baseX: beginX,
 	baseY: beginY
 };
+
 
 var joystick	= new VirtualJoystick(joystickOpts);
 
@@ -32,15 +36,7 @@ setInterval(function(){
 }, 150);
 setInterval(function(){
 	
-	// joystick and preloader melody
-	joystick._tracks;
-	
-	if(joystick._tracks.left > 50) {
-		preloader._start();
-		console.log(joystick._tracks);
-	}
-	
-	
+	// joystick and preloader melody	
 	
 	joystick._stickInchBackToBase();
 }, 1);
