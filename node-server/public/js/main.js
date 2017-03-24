@@ -1,5 +1,5 @@
-var y = $(window).height() / 2;
-var x = $(window).width() / 2;
+var beginY = $(window).height() / 2;
+var beginX = $(window).width() / 2;
 
 var joystickOpts = {
 	container	: document.getElementById('container'),
@@ -9,8 +9,8 @@ var joystickOpts = {
 	limitStickTravel: true,
 	stickRadius: 100,
 	stationaryBase: true,
-	baseX: x,
-	baseY: y
+	baseX: beginX,
+	baseY: beginY
 };
 
 var joystick	= new VirtualJoystick(joystickOpts);
