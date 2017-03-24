@@ -22,6 +22,13 @@
 				font-size: 4em;
 				width: 5%
 			}
+			#invert {
+				position: absolute;
+				bottom: 5%;
+				left: 49.5%;
+				z-index: 10;
+				font-size: 2em;
+			}
         </style>
 	</head>
 	<body>
@@ -29,6 +36,7 @@
 		</div>
 		<input type="range" id="slider" min=".4" max="1" step=".01" value="1">		
 		<span id="shutdown" class="ion-power"><i></i></span>
+		<span id="invert" class="ion-ios-lightbulb-outline"><i></i></span>
 		<script type="text/javascript" src="js/form-handler.js"></script>
 		<script src="./js/virtualjoystick.js"></script>
 		<script src="./js/main.js"></script>

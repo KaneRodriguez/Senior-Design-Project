@@ -39,6 +39,11 @@ $("#shutdown").on("click", function() {
 	});
 });
 
+$("#invert").on("click", function() {
+	$("body").toggleClass("inverted");
+	$(this).toggleClass("ion-ios-lightbulb ion-ios-lightbulb-outline");
+});
+
 window.addEventListener("load", function() {
 	document.getElementById("shutdown").style.color = "#0f0";
 });

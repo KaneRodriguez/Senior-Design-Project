@@ -20,3 +20,12 @@ body {
 	display: inline-block;
 	margin: 1em;
 }
+
+.inverted {
+	filter: grayscale(100%);
+	background: #fff;
+}
+
+.ion-ios-lightbulb-outline {
+	color: white
+}
