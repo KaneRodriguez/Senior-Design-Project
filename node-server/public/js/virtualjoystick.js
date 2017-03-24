@@ -56,7 +56,8 @@ var VirtualJoystick	= function(opts)
 		left: 0,
 		right: 0
 	};
-	this._init(this.opts);
+	this._onDown(this._baseX, this._baseY);
+	this._onUp();
 }
 
 VirtualJoystick.prototype.destroy	= function()
@@ -410,9 +411,6 @@ VirtualJoystick.prototype._changeColors	= function(base, stick)
 {
 	this.opts.baseStrokeStyle = base;
 	this.opts.strokeStyle = stick;
-	
-	var prevX = this._stickX;
-	var prevY = this._stickY;
 	
 	this.destroy();
 
