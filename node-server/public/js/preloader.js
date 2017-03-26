@@ -7,44 +7,41 @@ var MyPreloader	= function(opts)
 	this._SCREEN_WIDTH = window.innerWidth;
 	this._SCREEN_HEIGHT = window.innerHeight;
 
-	this._RADIUS = 70;
+	this._RADIUS = this.opts.radius || 70;
 
 	this._RADIUS_SCALE = 1;
 	this._RADIUS_SCALE_MIN = 1;
-	this._RADIUS_SCALE_MAX = 1.5;
+	this._RADIUS_SCALE_MAX = this.opts.radiusScaleMax || 1.5;
 
-	this._QUANTITY = 25;
-
-	this._canvas;
-	this._context;
-	this._particles;
+	this._QUANTITY = this.opts.quantity || 25;
 
 	this._mouseX = this._SCREEN_WIDTH * 0.5;
 	this._mouseY = this._SCREEN_HEIGHT * 0.5;
 	this._mouseIsDown = false;
-
-	this._SCREEN_WIDTH = window.innerWidth;
-	this._SCREEN_HEIGHT = window.innerHeight;
-
-	this._RADIUS = 70;
-
-	this._RADIUS_SCALE = 1;
-	this._RADIUS_SCALE_MIN = 1;
-	this._RADIUS_SCALE_MAX = 1.5;
-
-	this._QUANTITY = 25;
 
 	this._canvas = this.opts.canvas || document.createElement('canvas');
 	this._context;
 	this._particles;
 
-	this._mouseX = this._SCREEN_WIDTH * 0.5;
-	this._mouseY = this._SCREEN_HEIGHT * 0.5;
-	this._mouseIsDown = false;
+	this._colorMin = this.opts.colorMin || 220;
+	this._colorMax = this.opts.colorMax || 260;
+	
 	this._init();
+	// this._changeColors(12,23);
 }
 
-
+MyPreloader.prototype._changeColors	= function(min, max)
+{
+	this._colorMin = min;
+	this._colorMax = max;
+	
+	for (var i = 0; i < this._particles.length; i++) {
+		var particle = this._particles[i];
+		var randColor = get_random_color(this._colorMin, this._colorMax);
+		
+		particle.fillColor = randColor;
+	}		
+}
 
 MyPreloader.prototype._init	= function()
 {
@@ -72,6 +69,7 @@ MyPreloader.prototype._createParticles	= function()
 	this._particles = [];
 	
 	for (var i = 0; i < this._QUANTITY; i++) {
+		var randColor = get_random_color(this._colorMin, this._colorMax);
 		var particle = {
 			size: 1,
 			position: { x: this._mouseX, y: this._mouseY },
@@ -79,13 +77,25 @@ MyPreloader.prototype._createParticles	= function()
 			shift: { x: this._mouseX, y: this._mouseY },
 			speed: 0.01+Math.random()*0.04,
 			targetSize: 1,
-			fillColor: '#' + (Math.random() * 0x404040 + 0xaaaaaa | 0).toString(16),
+			fillColor: randColor,
 			orbit: this._RADIUS*.5 + (this._RADIUS * .5 * Math.random())
 		};
 		
 		this._particles.push( particle );
 	}	
 }
+
+function rand(min, max) {
+    return parseInt(Math.random() * (max-min+1), 10) + min;
+}
+
+function get_random_color(min, max) {
+    var h = rand(min, max); // color hue between 1 and 360
+    var s = rand(30, 100); // saturation 30-100%
+    var l = rand(30, 70); // lightness 30-70%
+    return 'hsl(' + h + ',' + s + '%,' + l + '%)';
+}
+
 MyPreloader.prototype._windowResizeHandler	= function()
 {
 	this._SCREEN_WIDTH = window.innerWidth;

@@ -19,7 +19,6 @@ window.addEventListener("load", function() {
 	document.getElementById("shutdown_fake").style.color = "#0f0";
 });
 
-
 // handle resizing of the window
 $(window).resize(function() {
 	joystick._baseX = $(window).width() / 2;
@@ -43,9 +42,9 @@ $("#invert").on("click", function() {
 	$("body").toggleClass("inverted");
 	$(this).toggleClass("ion-ios-lightbulb ion-ios-lightbulb-outline");
 });
-
+	
 window.setTimeout(function(event) {document.getElementById('shutdown_real').addEventListener('click', function (e) {
-	console.log(e);
+joystick.changeBaseColors(5, 6);
     joystick._changeColors("#f00","#f00");
 	document.getElementById('shutdown_fake').style.color = "#f00";
 	$.ajax({
