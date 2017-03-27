@@ -1,0 +1,6 @@
+# run: sudo crontab -e
+
+# put your server location on the bottom of the file
+
+# @reboot sh /home/pi/Downloads/Senior-Design-Project-Master/node-server/launcher.s$
+
