@@ -1,6 +1,7 @@
 
 # add this to /etc/apt/sources.list
-deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free r$
+deb http://www.linux-projects.org/listing/uv4l_repo/raspbian/ jessie main
+deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi
 
 # add this to : sudo crontab -e
 # might need to modify the directories and initialize the log file
