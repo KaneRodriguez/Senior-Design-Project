@@ -1,3 +1,8 @@
+/*
+	Basis for radar taken from https://codepen.io/Ripley6811/pen/CoIpD
+	The original radar code is licensed under the MIT license.
+*/
+
 function Ball(x,y,r){
 	this.x = x;
 	this.y = y;
