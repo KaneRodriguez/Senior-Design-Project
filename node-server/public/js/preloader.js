@@ -22,12 +22,11 @@ var MyPreloader	= function(opts)
 	this._canvas = this.opts.canvas || document.createElement('canvas');
 	this._context;
 	this._particles;
-
+	this._orbitRadius = this.opts.orbitRadius || -1;
 	this._colorMin = this.opts.colorMin || 220;
 	this._colorMax = this.opts.colorMax || 260;
 	
 	this._init();
-	// this._changeColors(12,23);
 }
 
 MyPreloader.prototype._changeColors	= function(min, max)
@@ -73,6 +72,13 @@ MyPreloader.prototype._createParticles	= function()
 	
 	for (var i = 0; i < this._QUANTITY; i++) {
 		var randColor = get_random_color(this._colorMin, this._colorMax);
+		var orbit;
+		if( this._orbitRadius < 0) {
+			orbit = this._RADIUS*.5 + (this._RADIUS * .5 * Math.random());
+		} else {
+			orbit = this._orbitRadius;
+		}
+		
 		var particle = {
 			size: 1,
 			position: { x: this._mouseX, y: this._mouseY },
@@ -81,7 +87,7 @@ MyPreloader.prototype._createParticles	= function()
 			speed: 0.01+Math.random()*0.04,
 			targetSize: 1,
 			fillColor: randColor,
-			orbit: this._RADIUS*.5 + (this._RADIUS * .5 * Math.random())
+			orbit: orbit
 		};
 		
 		this._particles.push( particle );
@@ -120,8 +126,8 @@ MyPreloader.prototype._loop	= function()
 	
 	this._RADIUS_SCALE = Math.min( this._RADIUS_SCALE, this._RADIUS_SCALE_MAX );
 	
-	this._context.fillStyle = 'rgba(0,0,0,0.05)';
-	this._context.fillRect(0, 0, this._context.canvas.width, this._context.canvas.height);
+	// this._context.fillStyle = 'rgba(0,0,0,0.05)';
+	this._context.clearRect(0, 0, this._context.canvas.width, this._context.canvas.height);
 	
 	for (i = 0, len = this._particles.length; i < len; i++) {
 		var particle = this._particles[i];

@@ -46,7 +46,7 @@ $("#invert").on("click", function() {
 	
 window.setTimeout(function(event) {document.getElementById('shutdown_real').addEventListener('click', function (e) {
 joystick.changeBaseColors(5, 6);
-    joystick._changeColors("#f00","#f00");
+
 	document.getElementById('shutdown_fake').style.color = "#f00";
 	$.ajax({
 		url: '/shutdown',

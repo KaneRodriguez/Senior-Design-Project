@@ -7,10 +7,10 @@ var VirtualJoystick	= function(opts)
 	this._strokeStyle	= opts.strokeStyle	|| 'cyan';
     this._baseStrokeStyle = opts.baseStrokeStyle || this._strokeStyle;
 	
-	this._preloader = new MyPreloader({quantity: 40, radiusScaleMax: 4.5, colorMin: 95, colorMax: 105});
+	this._preloader = new MyPreloader({radius: 90, quantity: 70, orbitRadius: 60, radiusScaleMax: 4.5, colorMin: 95, colorMax: 105});
 	this._baseCanvas = this._preloader._canvas;
 	
-	this._stickPreloader = new MyPreloader({radius: 15, quantity: 6});
+	this._stickPreloader = new MyPreloader({radius: 15, quantity: 70, orbitRadius: 20, colorMin: 95, colorMax: 105});
 	this._stickCanvas = this._stickPreloader._canvas;	
 	
 	this._stickEl		= opts.stickElement	|| this._buildJoystickStick();
@@ -233,6 +233,8 @@ VirtualJoystick.prototype._onDown	= function(x, y)
 			this._stickX = stickNormalizedX * this._stickRadius + this._baseX;
 			this._stickY = stickNormalizedY * this._stickRadius + this._baseY;
 		} 	
+		
+		this._preloader._mouseX = x;
 	}
 	
 	this._stickEl.style.display	= "";
@@ -405,27 +407,24 @@ VirtualJoystick.prototype._buildJoystickStick	= function()
 {
 	var canvas	= document.createElement( 'canvas' );
 	
-	canvas.width	= 86;
+	/*canvas.width	= 86;
 	canvas.height	= 86;
 	var ctx		= canvas.getContext('2d');
 	ctx.beginPath(); 
 	ctx.strokeStyle	= this._strokeStyle; 
 	ctx.lineWidth	= 6; 
 	ctx.arc( canvas.width/2, canvas.width/2, 40, 0, Math.PI*2, true); 
-	ctx.stroke();
-	// var canvas	= this._stickCanvas; // TODO
+	ctx.stroke();*/
+	
+	var canvas	= this._stickCanvas; // TODO
 	
 	return canvas;
 }
 
 // MTAV
-VirtualJoystick.prototype._changeColors	= function(base, stick)
+VirtualJoystick.prototype.changeJoystickStickColor	= function(min, max)
 {		
-	this.changeJoystickStickColor(stick);
-}
-VirtualJoystick.prototype.changeJoystickStickColor	= function(color)
-{		
-    var newColor = color || 'green'
+   /* var newColor = color || 'green'
 	var canvas = this._stickEl
 	canvas.width	= 86;
 	canvas.height	= 86;
@@ -437,8 +436,17 @@ VirtualJoystick.prototype.changeJoystickStickColor	= function(color)
 	ctx.lineWidth	= 6; 
 	ctx.arc( canvas.width/2, canvas.height/2, 40, 0, Math.PI*2, true); 
 	ctx.stroke();
-}
+	
+	// this was for the original stick
+	*/
+	
+	this._stickPreloader._changeColors(min, max);
 
+}
+VirtualJoystick.prototype.changeJoystickBaseColor	= function(min, max)
+{		
+	this._preloader._changeColors(min, max);
+}
 
 VirtualJoystick.prototype._init	= function(opts) {
 	opts			= opts			|| {};
@@ -635,7 +643,7 @@ VirtualJoystick.prototype._updateTracks = function() {
 			var adjustedMax = percentageOfOverallSpeed * maxColor;
 			
 			var newColor = this._preloader._changeColors(adjustedMin, adjustedMax);
-			this.changeJoystickStickColor(newColor);
+			this.changeJoystickStickColor(adjustedMin, adjustedMax);
 		} 
 	}
 }
