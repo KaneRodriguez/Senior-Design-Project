@@ -10,7 +10,8 @@ var joystickOpts = {
 	stickRadius: 100,
 	stationaryBase: true,
 	baseX: beginX,
-	baseY: beginY
+	baseY: beginY,
+	colorsMatchTrackSpeed: true
 };
 
 var joystick	= new VirtualJoystick(joystickOpts);

@@ -22,7 +22,7 @@ var VirtualJoystick	= function(opts)
 	this._limitStickTravel	= opts.limitStickTravel || false
 	this._stickRadius	= opts.stickRadius !== undefined ? opts.stickRadius : 100
 	this._useCssTransform	= opts.useCssTransform !== undefined ? opts.useCssTransform : false
-
+    this._colorsMatchTrackSpeed = opts.colorsMatchTrackSpeed || false;
 
 	this._container.style.position	= "relative"
 
@@ -70,11 +70,10 @@ var VirtualJoystick	= function(opts)
 	this._onUp();
 }
 
-
-
 VirtualJoystick.prototype.changeBaseColors	= function(min, max)
 {
-	this._preloader._changeColors(min, max);
+
+	// this._preloader._changeColors(min, max);
 }
 
 VirtualJoystick.prototype.destroy	= function()
@@ -421,15 +420,26 @@ VirtualJoystick.prototype._buildJoystickStick	= function()
 
 // MTAV
 VirtualJoystick.prototype._changeColors	= function(base, stick)
-{
-	this.opts.baseStrokeStyle = base;
-	this.opts.strokeStyle = stick;
-	
-	this.destroy();
-
-	this._init(this.opts);
-	
+{		
+	this.changeJoystickStickColor(stick);
 }
+VirtualJoystick.prototype.changeJoystickStickColor	= function(color)
+{		
+    var newColor = color || 'green'
+	var canvas = this._stickEl
+	canvas.width	= 86;
+	canvas.height	= 86;
+	
+	var ctx = canvas.getContext('2d');
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.beginPath(); 
+	ctx.strokeStyle	= newColor; 
+	ctx.lineWidth	= 6; 
+	ctx.arc( canvas.width/2, canvas.height/2, 40, 0, Math.PI*2, true); 
+	ctx.stroke();
+}
+
+
 VirtualJoystick.prototype._init	= function(opts) {
 	opts			= opts			|| {};
 	this._container		= opts.container	|| document.body;
@@ -608,7 +618,26 @@ VirtualJoystick.prototype._updateTracks = function() {
 			}
 		});	
 	}
-
+	var minColor = 0;
+	var maxColor = 260;
+	var steps = 100
+	var step = maxColor / steps;
+	
+	var percentageOfOverallSpeed = Math.sqrt(deltaX * deltaX + deltaY * deltaY ) / this._stickRadius;
+	
+	if( this._colorsMatchTrackSpeed ) {
+		console.log("PercentOverallSpeed: " + percentageOfOverallSpeed);
+		var changeFlag = Math.floor((percentageOfOverallSpeed * maxColor) / step);
+		
+		if(changeFlag != 0) {
+			
+			var adjustedMin = percentageOfOverallSpeed * maxColor - 20;
+			var adjustedMax = percentageOfOverallSpeed * maxColor;
+			
+			var newColor = this._preloader._changeColors(adjustedMin, adjustedMax);
+			this.changeJoystickStickColor(newColor);
+		} 
+	}
 }
 
 
