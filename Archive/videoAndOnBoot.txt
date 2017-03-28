@@ -1,0 +1,8 @@
+
+# add this to /etc/apt/sources.list
+deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free r$
+
+# add this to : sudo crontab -e
+# might need to modify the directories and initialize the log file
+
+@reboot sh /home/pi/Documents/MTAV_Senior-Design-Project/node-server/launcher.sh >/home/pi/logs/cronlog 2>&1
