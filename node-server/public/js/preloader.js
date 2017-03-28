@@ -34,13 +34,16 @@ MyPreloader.prototype._changeColors	= function(min, max)
 {
 	this._colorMin = min;
 	this._colorMax = max;
+	var lastRandColor = "green";
 	
 	for (var i = 0; i < this._particles.length; i++) {
 		var particle = this._particles[i];
 		var randColor = get_random_color(this._colorMin, this._colorMax);
 		
 		particle.fillColor = randColor;
-	}		
+		lastRandColor = randColor;
+	}
+    return lastRandColor;	
 }
 
 MyPreloader.prototype._init	= function()
@@ -60,7 +63,7 @@ MyPreloader.prototype._init	= function()
 		$( document ).ready(function() {
 			setInterval(function(){
 				__this._loop();
-			}, 1000 / 60);
+			}, 20);
 		});
 	}	
 }
