@@ -32,7 +32,7 @@ setInterval(function(){
 }, 150);
 setInterval(function(){
 	
-	joystick._stickInchBackToBase();
+	// joystick._stickInchBackToBase();
 }, 1);
 
 document.getElementById('slider').addEventListener('input', function() {

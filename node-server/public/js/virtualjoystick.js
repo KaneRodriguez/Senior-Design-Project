@@ -7,10 +7,10 @@ var VirtualJoystick	= function(opts)
 	this._strokeStyle	= opts.strokeStyle	|| 'cyan';
     this._baseStrokeStyle = opts.baseStrokeStyle || this._strokeStyle;
 	
-	this._preloader = new MyPreloader({radius: 90, quantity: 70, orbitRadius: 60, radiusScaleMax: 4.5, colorMin: 95, colorMax: 105});
+	this._preloader = new MyPreloader({radius: 20, quantity: 70, orbitRadius: 20, radiusScaleMax: 4.5, colorMin: 95, colorMax: 105});
 	this._baseCanvas = this._preloader._canvas;
 	
-	this._stickPreloader = new MyPreloader({radius: 15, quantity: 70, orbitRadius: 20, colorMin: 95, colorMax: 105});
+	this._stickPreloader = new MyPreloader({radius: 45, quantity: 70, colorMin: 95, colorMax: 105, speedFactor: 3});
 	this._stickCanvas = this._stickPreloader._canvas;	
 	
 	this._stickEl		= opts.stickElement	|| this._buildJoystickStick();
@@ -196,7 +196,7 @@ VirtualJoystick.prototype.left	= function(){
 VirtualJoystick.prototype._onUp	= function()
 {
 	this._pressed	= false; 
-	this._preloader._mouseIsDown = this._pressed;
+	// this._preloader._mouseIsDown = this._pressed;
 	// this._stickEl.style.display	= "none";
 	
 	if(this._stationaryBase == false){	
@@ -205,12 +205,14 @@ VirtualJoystick.prototype._onUp	= function()
 		this._baseX	= this._baseY	= 0;
 		this._stickX	= this._stickY	= 0;
 	}
+	this._stickPreloader._mouseX = this._baseX;
+	this._stickPreloader._mouseY =  this._baseY;
 }
 
 VirtualJoystick.prototype._onDown	= function(x, y)
 {
 	this._pressed	= true; 
-	this._preloader._mouseIsDown = this._pressed;
+	// this._preloader._mouseIsDown = this._pressed;
 	
 	if(this._stationaryBase == false){
 		this._baseX	= x;
@@ -234,11 +236,14 @@ VirtualJoystick.prototype._onDown	= function(x, y)
 			this._stickY = stickNormalizedY * this._stickRadius + this._baseY;
 		} 	
 		
-		this._preloader._mouseX = x;
+		
 	}
+	this._stickPreloader._mouseX = this._stickX;
+	this._stickPreloader._mouseY = this._stickY;
+	
 	
 	this._stickEl.style.display	= "";
-	this._move(this._stickEl.style, (this._stickX - this._stickEl.width /2), (this._stickY - this._stickEl.height/2));	
+	// this._move(this._stickEl.style, (this._stickX - this._stickEl.width /2), (this._stickY - this._stickEl.height/2));	
 }
 
 VirtualJoystick.prototype._onMove	= function(x, y)
@@ -260,8 +265,9 @@ VirtualJoystick.prototype._onMove	= function(x, y)
 				this._stickY = stickNormalizedY * this._stickRadius + this._baseY;
 			} 		
 		}
-		
-        	this._move(this._stickEl.style, (this._stickX - this._stickEl.width /2), (this._stickY - this._stickEl.height/2));	
+			this._stickPreloader._mouseX = this._stickX;
+	this._stickPreloader._mouseY = this._stickY;
+     //   	this._move(this._stickEl.style, (this._stickX - this._stickEl.width /2), (this._stickY - this._stickEl.height/2));	
 	}	
 }
 
@@ -634,7 +640,7 @@ VirtualJoystick.prototype._updateTracks = function() {
 	var percentageOfOverallSpeed = Math.sqrt(deltaX * deltaX + deltaY * deltaY ) / this._stickRadius;
 	
 	if( this._colorsMatchTrackSpeed ) {
-		console.log("PercentOverallSpeed: " + percentageOfOverallSpeed);
+		// console.log("PercentOverallSpeed: " + percentageOfOverallSpeed);
 		var changeFlag = Math.floor((percentageOfOverallSpeed * maxColor) / step);
 		
 		if(changeFlag != 0) {
