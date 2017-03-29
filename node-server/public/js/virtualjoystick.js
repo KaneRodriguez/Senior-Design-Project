@@ -205,10 +205,18 @@ VirtualJoystick.prototype._onUp	= function()
 		this._baseX	= this._baseY	= 0;
 		this._stickX	= this._stickY	= 0;
 	}
-	this._stickPreloader._mouseX = this._baseX;
-	this._stickPreloader._mouseY =  this._baseY;
+	this._changeStickY(this._baseY);
+	this._changeStickX(this._baseX);
 }
 
+VirtualJoystick.prototype._changeStickX = function(newX) {
+	this._stickX = newX;
+	this._stickPreloader._mouseX =  newX;	
+}
+VirtualJoystick.prototype._changeStickY = function(newY) {
+	this._stickY = newY;
+	this._stickPreloader._mouseY =  newY;
+}
 VirtualJoystick.prototype._onDown	= function(x, y)
 {
 	this._pressed	= true; 
@@ -238,9 +246,8 @@ VirtualJoystick.prototype._onDown	= function(x, y)
 		
 		
 	}
-	this._stickPreloader._mouseX = this._stickX;
-	this._stickPreloader._mouseY = this._stickY;
-	
+	this._changeStickY(this._stickY);
+	this._changeStickX(this._stickX);
 	
 	this._stickEl.style.display	= "";
 	// this._move(this._stickEl.style, (this._stickX - this._stickEl.width /2), (this._stickY - this._stickEl.height/2));	
@@ -637,7 +644,7 @@ VirtualJoystick.prototype._updateTracks = function() {
 			right: Math.floor(L)
 		};
 		
-		// console.log(this._tracks);
+		console.log(this._tracks);
 		//make the AJAX call
 		$.ajax({
 			url: '/tracks-update',
