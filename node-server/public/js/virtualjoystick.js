@@ -298,6 +298,21 @@ VirtualJoystick.prototype._onMouseMove	= function(event)
 VirtualJoystick.prototype._stickInchBackToBase	= function(event) {
 	if( this._pressed == false ) 
 	{
+		if(this._limitStickTravel === true){
+			var deltaX	= this.deltaX();
+			var deltaY	= this.deltaY();
+			var stickDistance = Math.sqrt( (deltaX * deltaX) + (deltaY * deltaY) );
+			if(stickDistance > this._stickRadius){
+				var stickNormalizedX = deltaX / stickDistance;
+				var stickNormalizedY = deltaY / stickDistance;
+			
+				this._stickX = stickNormalizedX * this._stickRadius + this._baseX;
+				this._stickY = stickNormalizedY * this._stickRadius + this._baseY;
+			} 		
+		}
+		
+		
+		
 		var increments = 50;
         var step = this._stickRadius / increments;
 		

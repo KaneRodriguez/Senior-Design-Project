@@ -1,3 +1,24 @@
+
+
+/******* Video Stuff ****/
+
+// Show loading notice
+		var videoCanvas = document.getElementById('videoCanvas');
+		var ctx = videoCanvas.getContext('2d');
+		ctx.fillStyle = '#444';
+		ctx.fillText('Loading...', videoCanvas.width/2-30, videoCanvas.height/3);
+
+
+
+
+		// Setup the WebSocket connection and start the player
+		var client = new WebSocket('ws://127.0.0.1:8084/');
+		var player = new jsmpeg(client, {canvas:videoCanvas});
+
+		
+
+/******* End Video Stuff ****/
+
 var beginY = $(window).height() / 2;
 var beginX = $(window).width() / 2;
 
@@ -16,6 +37,7 @@ var joystickOpts = {
 
 var joystick	= new VirtualJoystick(joystickOpts);
 
+
 window.addEventListener("load", function() {
 	document.getElementById("shutdown_fake").style.color = "#0f0";
 });
@@ -32,7 +54,7 @@ setInterval(function(){
 }, 150);
 setInterval(function(){
 	
-	// joystick._stickInchBackToBase();
+	joystick._stickInchBackToBase();
 }, 1);
 
 document.getElementById('slider').addEventListener('input', function() {
