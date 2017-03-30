@@ -54,14 +54,27 @@
 					right: 0;
 					margin:auto;
 				}
+				#leftTrackSpeedPercentage, #rightTrackSpeedPercentage {
+					position: fixed;
+					top: 0px;
+					z-index; 10;
+				}
 		</style>
 		<title></title>
 	</head>
 	<body>
 	
-	<!-- preloader -->
+	<!-- preload joystick -->
 	<script src="./js/preloader.js"></script>
-	<!-- end preloader -->
+	<script src="./js/virtualjoystick.js"></script>
+    <script src="./js/joystickMain.js"></script>
+    <div id="container"></div>
+    <div id="leftTrackSpeedPercentage"></div>
+    <div id="rightTrackSpeedPercentage"></div>
+	<!-- end preload joystick -->
+	
+	
+	
 	
 	<div id="shutdown_modal" class="modalDialog">
 		<div>
@@ -102,12 +115,8 @@
 			</ul>
 		</div>
 	</div>
-	<div id="container"></div>
-	<canvas id="radar"></canvas>
+	<canvas id="radar" style="display: none">></canvas>
 	<canvas id="videoCanvas" width="320" height="240" style="z-index: -1"></canvas>
-
-	<script type="text/javascript" src="js/form-handler.js"></script>
-	<script src="./js/virtualjoystick.js"></script>
 	<script src="./js/radar.js"></script>
 	<script type="text/javascript" src="jsmpg.js"></script>
 	<script src="./js/main.js"></script>

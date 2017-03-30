@@ -6,11 +6,14 @@ var VirtualJoystick	= function(opts)
 	this._container		= opts.container	|| document.body;
 	this._strokeStyle	= opts.strokeStyle	|| 'cyan';
     this._baseStrokeStyle = opts.baseStrokeStyle || this._strokeStyle;
+	this._usePreloaderStick = opts.usePreloaderStick || false;
+	this._stickAnimateBackToBase = opts.stickAnimateBackToBase || false;
+	this._stickAnimateToLocation = opts.stickAnimateToLocation || false;
 	
-	this._preloader = new MyPreloader({radius: 20, quantity: 70, orbitRadius: 20, radiusScaleMax: 4.5, colorMin: 95, colorMax: 105});
+	this._preloader = new MyPreloader({radius: 20, quantity: 6, orbitRadius: 20, radiusScaleMax: 4.5, colorMin: 95, colorMax: 105, speedFactor: 15});
 	this._baseCanvas = this._preloader._canvas;
 	
-	this._stickPreloader = new MyPreloader({radius: 45, quantity: 70, colorMin: 95, colorMax: 105, speedFactor: 3});
+	this._stickPreloader = new MyPreloader({inactive: true, radius: 15, orbitRadius: 15, quantity: 20, colorMin: 95, colorMax: 105, speedFactor: 8});
 	this._stickCanvas = this._stickPreloader._canvas;	
 	
 	this._stickEl		= opts.stickElement	|| this._buildJoystickStick();
@@ -66,6 +69,9 @@ var VirtualJoystick	= function(opts)
 		left: 0,
 		right: 0
 	};
+	this._targetX = this._baseX;
+	this._targetY = this._baseY;
+	
 	this._onDown(this._baseX, this._baseY);
 	this._onUp();
 }
@@ -205,8 +211,10 @@ VirtualJoystick.prototype._onUp	= function()
 		this._baseX	= this._baseY	= 0;
 		this._stickX	= this._stickY	= 0;
 	}
-	this._changeStickY(this._baseY);
-	this._changeStickX(this._baseX);
+	if ( ! this._stickAnimateBackToBase ) {
+		this._changeStickY(this._baseY);
+		this._changeStickX(this._baseX);
+	}		
 }
 
 VirtualJoystick.prototype._changeStickX = function(newX) {
@@ -222,41 +230,15 @@ VirtualJoystick.prototype._onDown	= function(x, y)
 	this._pressed	= true; 
 	// this._preloader._mouseIsDown = this._pressed;
 	
-	if(this._stationaryBase == false){
-		this._baseX	= x;
-		this._baseY	= y;
-		this._baseEl.style.display	= "";
-		this._move(this._baseEl.style, (this._baseX - this._baseEl.width /2), (this._baseY - this._baseEl.height/2));
-	}
+	if(!this._stickAnimateToLocation) {
 	
-	this._stickX	= x;
-	this._stickY	= y;
-	
-	if(this._limitStickTravel === true){
-		var deltaX	= this.deltaX();
-		var deltaY	= this.deltaY();
-		var stickDistance = Math.sqrt( (deltaX * deltaX) + (deltaY * deltaY) );
-		if(stickDistance > this._stickRadius){
-			var stickNormalizedX = deltaX / stickDistance;
-			var stickNormalizedY = deltaY / stickDistance;
-			
-			this._stickX = stickNormalizedX * this._stickRadius + this._baseX;
-			this._stickY = stickNormalizedY * this._stickRadius + this._baseY;
-		} 	
+		if(this._stationaryBase == false){
+			this._baseX	= x;
+			this._baseY	= y;
+			this._baseEl.style.display	= "";
+			this._move(this._baseEl.style, (this._baseX - this._baseEl.width /2), (this._baseY - this._baseEl.height/2));
+		}
 		
-		
-	}
-	this._changeStickY(this._stickY);
-	this._changeStickX(this._stickX);
-	
-	this._stickEl.style.display	= "";
-	// this._move(this._stickEl.style, (this._stickX - this._stickEl.width /2), (this._stickY - this._stickEl.height/2));	
-}
-
-VirtualJoystick.prototype._onMove	= function(x, y)
-{
-
-	if( this._pressed === true ){
 		this._stickX	= x;
 		this._stickY	= y;
 		
@@ -267,14 +249,57 @@ VirtualJoystick.prototype._onMove	= function(x, y)
 			if(stickDistance > this._stickRadius){
 				var stickNormalizedX = deltaX / stickDistance;
 				var stickNormalizedY = deltaY / stickDistance;
-			
+				
 				this._stickX = stickNormalizedX * this._stickRadius + this._baseX;
 				this._stickY = stickNormalizedY * this._stickRadius + this._baseY;
-			} 		
+			} 	
+			
+			
 		}
-			this._stickPreloader._mouseX = this._stickX;
-	this._stickPreloader._mouseY = this._stickY;
-     //   	this._move(this._stickEl.style, (this._stickX - this._stickEl.width /2), (this._stickY - this._stickEl.height/2));	
+			this._changeStickY(this._stickY);
+			this._changeStickX(this._stickX);
+			
+			if( !this._usePreloaderStick ) {
+				this._stickEl.style.display	= "";
+				this._move(this._stickEl.style, (this._stickX - this._stickEl.width /2), (this._stickY - this._stickEl.height/2));	
+			}
+	} else {
+		this._stickInchToLocation(x, y);
+	}
+}
+
+VirtualJoystick.prototype._onMove	= function(x, y)
+{
+
+	if( this._pressed === true ){
+		
+		if(!this._stickAnimateToLocation) {
+			this._stickX	= x;
+			this._stickY	= y;
+		
+			if(this._limitStickTravel === true){
+				var deltaX	= this.deltaX();
+				var deltaY	= this.deltaY();
+				var stickDistance = Math.sqrt( (deltaX * deltaX) + (deltaY * deltaY) );
+				if(stickDistance > this._stickRadius){
+					var stickNormalizedX = deltaX / stickDistance;
+					var stickNormalizedY = deltaY / stickDistance;
+				
+					this._stickX = stickNormalizedX * this._stickRadius + this._baseX;
+					this._stickY = stickNormalizedY * this._stickRadius + this._baseY;
+				} 		
+			}
+				
+			if( !this._usePreloaderStick ) {
+				this._stickEl.style.display	= "";
+				this._move(this._stickEl.style, (this._stickX - this._stickEl.width /2), (this._stickY - this._stickEl.height/2));	
+			} else {
+				this._stickPreloader._mouseX = this._stickX;
+				this._stickPreloader._mouseY = this._stickY;
+			}
+		}  else {
+			this._stickInchToLocation(x, y);
+		}	
 	}	
 }
 
@@ -303,7 +328,7 @@ VirtualJoystick.prototype._onMouseMove	= function(event)
 	return this._onMove(x, y);
 }
 VirtualJoystick.prototype._stickInchBackToBase	= function(event) {
-	if( this._pressed == false ) 
+	if( this._pressed == false && this._stickAnimateBackToBase) 
 	{
 		if(this._limitStickTravel === true){
 			var deltaX	= this.deltaX();
@@ -317,8 +342,6 @@ VirtualJoystick.prototype._stickInchBackToBase	= function(event) {
 				this._stickY = stickNormalizedY * this._stickRadius + this._baseY;
 			} 		
 		}
-		
-		
 		
 		var increments = 50;
         var step = this._stickRadius / increments;
@@ -337,11 +360,59 @@ VirtualJoystick.prototype._stickInchBackToBase	= function(event) {
 			this._stickY = this._baseY;
 		}
 		
-		
 		this._move(this._stickEl.style, (this._stickX - this._stickEl.width /2), (this._stickY - this._stickEl.height/2));	
 	}
 }
+VirtualJoystick.prototype._stickInchToLocation	= function(locationX, locationY) 
+{
 
+	if( this._pressed == true && this._stickAnimateToLocation) 
+	{
+		if(this._limitStickTravel === true){
+			var deltaX	= locationX - this._baseX;
+			var deltaY	= locationY - this._baseY;
+			var stickDistance = Math.sqrt( (deltaX * deltaX) + (deltaY * deltaY) );
+			if(stickDistance > this._stickRadius){
+				var stickNormalizedX = deltaX / stickDistance;
+				var stickNormalizedY = deltaY / stickDistance;
+			
+				locationX = stickNormalizedX * this._stickRadius + this._baseX;
+				locationY = stickNormalizedY * this._stickRadius + this._baseY;
+			} 		
+		}
+		/*
+		 *  we want to go to a location, we have the locations coordinates, we have our current coordinates, we make up the difference 
+		 */
+		var increments = 50;
+		var step = this._stickRadius / increments;
+		
+		
+		// these are deltas between stick and desired location
+		var deltaX	= this._stickX - locationX;
+		var deltaY	= this._stickY - locationY;
+		
+		var dxSign = (deltaX >= 0 ? 1 : -1 );
+		var dySign = (deltaY >= 0 ? 1 : -1 );
+			
+		this._stickX = this._stickX - dxSign * step;
+		this._stickY = this._stickY - dySign * step;			
+		
+		if ( Math.sqrt( deltaX * deltaX + deltaY * deltaY ) < step )  {
+			this._stickX = locationX;
+			this._stickY = locationY;
+		}
+		this._targetX = locationX;
+		this._targetY = locationY;
+			
+		if( !this._usePreloaderStick ) {
+			this._stickEl.style.display	= "";
+			this._move(this._stickEl.style, (this._stickX - this._stickEl.width /2), (this._stickY - this._stickEl.height/2));	
+		} else {
+			this._stickPreloader._mouseX = this._stickX;
+			this._stickPreloader._mouseY = this._stickY;
+		}
+	}
+}
 //////////////////////////////////////////////////////////////////////////////////
 //		comment								//
 //////////////////////////////////////////////////////////////////////////////////
@@ -435,16 +506,21 @@ VirtualJoystick.prototype._buildJoystickStick	= function()
 {
 	var canvas	= document.createElement( 'canvas' );
 	
-	/*canvas.width	= 86;
-	canvas.height	= 86;
-	var ctx		= canvas.getContext('2d');
-	ctx.beginPath(); 
-	ctx.strokeStyle	= this._strokeStyle; 
-	ctx.lineWidth	= 6; 
-	ctx.arc( canvas.width/2, canvas.width/2, 40, 0, Math.PI*2, true); 
-	ctx.stroke();*/
-	
-	var canvas	= this._stickCanvas; // TODO
+	if(this._usePreloaderStick)
+	{
+		canvas = this._stickCanvas;
+		
+	} else {
+		
+		canvas.width	= 86;
+		canvas.height	= 86;
+		var ctx		= canvas.getContext('2d');
+		ctx.beginPath(); 
+		ctx.strokeStyle	= this._strokeStyle; 
+		ctx.lineWidth	= 6; 
+		ctx.arc( canvas.width/2, canvas.width/2, 40, 0, Math.PI*2, true); 
+		ctx.stroke();
+	}
 	
 	return canvas;
 }
@@ -452,24 +528,33 @@ VirtualJoystick.prototype._buildJoystickStick	= function()
 // MTAV
 VirtualJoystick.prototype.changeJoystickStickColor	= function(min, max)
 {		
-   /* var newColor = color || 'green'
-	var canvas = this._stickEl
-	canvas.width	= 86;
-	canvas.height	= 86;
-	
-	var ctx = canvas.getContext('2d');
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx.beginPath(); 
-	ctx.strokeStyle	= newColor; 
-	ctx.lineWidth	= 6; 
-	ctx.arc( canvas.width/2, canvas.height/2, 40, 0, Math.PI*2, true); 
-	ctx.stroke();
-	
-	// this was for the original stick
-	*/
-	
-	this._stickPreloader._changeColors(min, max);
+   if( this._usePreloaderStick ) {
+	  	this._stickPreloader._changeColors(min, max); 
+   } else {
+	    var newColor = get_random_color(min, max) || 'green'
+		var canvas = this._stickEl
+		canvas.width	= 86;
+		canvas.height	= 86;
+		
+		var ctx = canvas.getContext('2d');
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.beginPath(); 
+		ctx.strokeStyle	= newColor; 
+		ctx.lineWidth	= 6; 
+		ctx.arc( canvas.width/2, canvas.height/2, 40, 0, Math.PI*2, true); 
+		ctx.stroke();
+	}
 
+}
+function rand(min, max) {
+    return parseInt(Math.random() * (max-min+1), 10) + min;
+}
+
+function get_random_color(min, max) {
+    var h = rand(min, max); // color hue between 1 and 360
+    var s = 65;
+    var l = 50;
+    return 'hsl(' + h + ',' + s + '%,' + l + '%)';
 }
 VirtualJoystick.prototype.changeJoystickBaseColor	= function(min, max)
 {		
@@ -675,5 +760,4 @@ VirtualJoystick.prototype._updateTracks = function() {
 		} 
 	}
 }
-
 

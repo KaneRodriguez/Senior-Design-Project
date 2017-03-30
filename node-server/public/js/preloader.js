@@ -3,7 +3,7 @@ var MyPreloader	= function(opts)
 	_this = this;
 
 	this.opts			= opts			|| {};
-
+    this._inactive = opts.inactive || false;
 	this._SCREEN_WIDTH = window.innerWidth;
 	this._SCREEN_HEIGHT = window.innerHeight;
 
@@ -27,8 +27,9 @@ var MyPreloader	= function(opts)
 	this._colorMax = this.opts.colorMax || 260;
 	this._minSpeedPercentage = this.opts.minSpeed || 10;
 	this._speedFactor = this.opts.speedFactor || 0;
-	
-	this._init();
+	if(!this._inactive) {
+		this._init();
+	}
 }
 
 MyPreloader.prototype._changeColors	= function(min, max)
@@ -64,7 +65,7 @@ MyPreloader.prototype._init	= function()
 		$( document ).ready(function() {
 			setInterval(function(){
 				__this._loop();
-			}, 20);
+			}, 60);
 		});
 	}	
 }
@@ -81,18 +82,18 @@ MyPreloader.prototype._createParticles	= function()
 		} else {
 			orbit = this._orbitRadius;
 		}
-		particleSpeed = (0.01+Math.random()*0.04);
+		particleSpeed = (0.05);
 
 		if ( this._speedFactor > 0 ) {
 			 particleSpeed *= this._speedFactor;
 		}
 		var particle = {
-			size: 1,
+			size: 7,
 			position: { x: this._mouseX, y: this._mouseY },
 			offset: { x: 0, y: 0 },
 			shift: { x: this._mouseX*2, y: this._mouseY*2 },
 			speed: particleSpeed,
-			targetSize: 1,
+			targetSize: 4,
 			fillColor: randColor,
 			orbit: orbit
 		};
