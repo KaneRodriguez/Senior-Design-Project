@@ -1,3 +1,5 @@
+#include <Wire.h>
+#include <Adafruit_PWMServoDriver.h>
 #include <ArduinoJson.h>
 
 /******************* Initialize Global Variables ********************/
@@ -6,6 +8,15 @@
 
 MTAVMotor motorA("motorA", "forward", 0);
 MTAVMotor motorB("motorB", "forward", 0);
+
+Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+
+#define SERVOMIN  150 // this is the 'minimum' pulse length count (out of 4096)
+#define SERVOMAX  600 // this is the 'maximum' pulse length count (out of 4096)
+
+
+
+
 
 String userCommand = "";
 
@@ -26,6 +37,14 @@ void setup() {
     Serial.println("Arduino set up! \n");
     
     // motorA.sendSerialMotorSpecs();
+
+ pwm.begin();
+   
+   pwm.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
+ 
+   yield();
+
+
         
     delay(3000);
     
@@ -58,7 +77,7 @@ bool commandReceived(char json[200]) {
     return false;
   }
 
-  const char * id = root["id"]; // TODO: error check if there is an "id" attribute
+ /* const char * id = root["id"]; // TODO: error check if there is an "id" attribute
 
   // TODO: make switch lookup table
   if(strcmp(id,"motorA")==0) {
@@ -67,7 +86,16 @@ bool commandReceived(char json[200]) {
   if(strcmp(id,"motorB")==0) {
     motorB.recieveSerialMotorUpdates(root); // todo, pass in the JsonObject to the function
   }
+  */
+  int speedPercentage = root["s"];
+  root.printTo(Serial);  
+  float difference = SERVOMAX - SERVOMIN;
+  float position = difference * speedPercentage + SERVOMIN;
   
+  Serial.print("Moving to position" + speedPercentage);
+  Serial.print(speedPercentage);
+  pwm.setPWM(0, 0, 60);
+ 
   return true;
 }
 
@@ -97,7 +125,6 @@ void serialEvent() {
 }
 
 /************ End Communication with the Pi ***************/
-
 
 
 
