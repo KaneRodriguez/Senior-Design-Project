@@ -25,12 +25,18 @@ String userCommand = "";
 /*********************** General Setup ***********************/
 void setup() {
     Serial.begin(9600);      // open the serial port at 9600 bps:
+    //  pwm.begin();                //FOR SERVOS
+    //  pwm.setPWMFreq(60);         //FOR SERVOS
+    
     motorA.setMotorLpwmRpwmEnDisPins(11, 3, 2, 4);    
     motorB.setMotorLpwmRpwmEnDisPins(10, 9, 8, 7);    
 
     motorA.updateMotor();
     motorB.updateMotor();
-
+    
+    
+    
+    
     // reserve 200 bytes for the userCommand (consider lowering):
     userCommand.reserve(200);
     
