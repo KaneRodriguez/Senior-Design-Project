@@ -24,16 +24,7 @@
 	          	left: 40%;
 	            bottom: -15%;
 			}
-				
-	           #slider {
-	               position: absolute;
-	               bottom: 30%;
-	               left: -20%;
-	               z-index: 10;
-	               width: 4em;
-	               transform: rotate(270deg);
-	           }
-	           #invert {
+			#invert {
 	               position: absolute;
 	               left: 40%;
 	               bottom: -15%;
@@ -64,18 +55,45 @@
 	</head>
 	<body>
 	
-	<!-- preload joystick -->
-	<script src="./js/preloader.js"></script>
-	<script src="./js/virtualjoystick.js"></script>
-    <script src="./js/joystickMain.js"></script>
-    <div id="container"></div>
-    <div id="leftTrackSpeedPercentage"></div>
-    <div id="rightTrackSpeedPercentage"></div>
-	<!-- end preload joystick -->
-	
-	
-	
-	
+		<div id="shutdown_modal" class="modalDialog">
+			<div>
+				<a href="#close" title="Close" class="close">X</a>
+				<h2>Confirm Shutdown</h2>
+				<p>Only click here if you're sure you want to shut down the MTAV:</p>
+				<a class="ion-power ionic shutdown" href="#close" id="shutdown_real" title="Shutdown"><i></i></a>
+			</div>
+		</div>
+	<div class="actions active_action" id="home_action">
+
+
+				<!-- preload joystick -->
+		<script src="./js/preloader.js"></script>
+		<script src="./js/virtualjoystick.js"></script>
+		<script src="./js/joystickMain.js"></script>
+		<!--<div id="container"></div>-->
+		<!-- end preload joystick -->
+	</div>
+	<div class="actions" id="steering_action">
+		Steering...
+
+	</div>
+	<div class="actions" id="arm_action">
+		Arm...
+
+	</div>
+	<div class="actions" id="camera_action">
+		Camera...
+
+	</div>
+	<div class="actions" id="metal_action">
+		Metal...
+
+	</div>
+	<div class="actions" id="settings_action">
+		Settings...
+
+	</div>
+		
 	<div id="shutdown_modal" class="modalDialog">
 		<div>
 			<a href="#close" title="Close" class="close">X</a>
@@ -111,7 +129,6 @@
 				<li>
 					<a class="ion-ios-lightbulb-outline ionic" href="#" id="invert" title="Grayscale Mode"><i></i></a>
 				</li>
-				<li><input id="slider" max="1" min=".4" step=".01" type="range" value="1"></li>
 			</ul>
 		</div>
 	</div>

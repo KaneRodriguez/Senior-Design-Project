@@ -25,11 +25,6 @@ window.addEventListener("load", function() {
 });
 
 
-
-document.getElementById('slider').addEventListener('input', function() {
-	document.body.style.opacity = this.value;
-});
-
 $("#invert").on("click", function() {
 	$("body").toggleClass("inverted");
 	$(this).toggleClass("ion-ios-lightbulb ion-ios-lightbulb-outline");
@@ -47,16 +42,46 @@ joystick.changeBaseColors(5, 6);
 		}
 	});
 }, false) }, 2000);
-$(document).on("click", function(e){console.log(e)});
-$(document).ready(function(){
- 			$("ul.osx-dock li").each(function (type) {
-		     	$(this).hover(function () {
-		      		$(this).prev("li").addClass("nearby");
-		      		$(this).next("li").addClass("nearby");
-		     	},
-		     	function () {
-		      		$(this).prev("li").removeClass("nearby");
-		      		$(this).next("li").removeClass("nearby");
-		     	});
-		    });
+$(".osx-dock li a").on("click touchstart", function() {
+	if (!$(this).is("#home,#steering")) {
+		$("#stickCanvas,#innerCanvas").hide();
+	} else {
+		$("#stickCanvas,#innerCanvas").show();
+	}
+	if (!$(this).is("#home,#camera")) {
+		$("#videoCanvas").hide();
+	} else {
+		if ($(this).is("#camera")) {
+			$("#videoCanvas").css("width", "80%");
+			$("#videoCanvas").css("height", "60%");
+		}
+		else if ($(this).is("#home")) {
+			$("#videoCanvas").css("width", "320px");
+			$("#videoCanvas").css("height", "240px");
+		}
+		$("#videoCanvas").show();
+	}
+	$(".active_action").hide();
+	$(".active_action").removeClass("active_action");
+	$(".active").removeClass("active");
+	$("#" + $(this).attr("id") + "_action").show();
+	$("#" + $(this).attr("id") + "_action").addClass("active_action");
+	$(this).addClass("active");
+});
+$(document).ready(function() {
+	$(".actions").hide();
+	$("ul.osx-dock li").each(function (type) {
+		$(this).hover(function () {
+			$(this).prev("li").addClass("nearby");
+			$(this).next("li").addClass("nearby");
+		},
+		function () {
+			$(this).prev("li").removeClass("nearby");
+			$(this).next("li").removeClass("nearby");
 		});
+		$(this).click(function() {
+			$(".active").removeClass("active");
+			$(this).addClass("active")
+		});
+	});
+});

@@ -20,6 +20,7 @@ var MyPreloader	= function(opts)
 	this._mouseIsDown = false;
 
 	this._canvas = this.opts.canvas || document.createElement('canvas');
+	this._canvas.id = "innerCanvas";
 	this._context;
 	this._particles;
 	this._orbitRadius = this.opts.orbitRadius || -1;

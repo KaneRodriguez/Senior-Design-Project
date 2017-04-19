@@ -315,14 +315,19 @@ VirtualJoystick.prototype._onMouseUp	= function(event)
 
 VirtualJoystick.prototype._onMouseDown	= function(event)
 {
+	if (!$(".active_action").is("#home_action,#steering_action")) {
+		return;
+	}
 	event.preventDefault();
 	var x	= event.clientX;
 	var y	= event.clientY;
-	return this._onDown(x, y);
+	return (y < .8 * document.body.scrollHeight ? this._onDown(x, y) : '');
 }
-
 VirtualJoystick.prototype._onMouseMove	= function(event)
 {
+	if (!$(".active_action").is("#home_action,#steering_action")) {
+		return;
+	}
 	var x	= event.clientX;
 	var y	= event.clientY;
 	return this._onMove(x, y);
@@ -438,7 +443,7 @@ VirtualJoystick.prototype._onTouchStart	= function(event)
 	// forward the action
 	var x		= touch.pageX;
 	var y		= touch.pageY;
-	return this._onDown(x, y)
+	return (y < .8 * document.body.scrollHeight ? this._onDown(x, y) : '');
 }
 
 VirtualJoystick.prototype._onTouchEnd	= function(event)
@@ -511,7 +516,7 @@ VirtualJoystick.prototype._buildJoystickStick	= function()
 		canvas = this._stickCanvas;
 		
 	} else {
-		
+		canvas.id = "stickCanvas";
 		canvas.width	= 86;
 		canvas.height	= 86;
 		var ctx		= canvas.getContext('2d');
