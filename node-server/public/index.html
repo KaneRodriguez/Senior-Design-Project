@@ -19,18 +19,6 @@
 	               z-index: 10;
 	               font-size: 2.5em;
 	           }
-			#shutdown_fake {
-				position: absolute;
-	          	left: 40%;
-	            bottom: -15%;
-			}
-			#invert {
-	               position: absolute;
-	               left: 40%;
-	               bottom: -15%;
-	               z-index: 10;
-	               font-size: 2.5em;
-	           }
 	           /* video stuff */
 				#videoCanvas {
 					/* Always stretch the canvas to 640x480, regardless of its
@@ -78,7 +66,20 @@
 
 	</div>
 	<div class="actions" id="arm_action">
-		Arm...
+		<fieldset class="arm_controls">
+			<legend>Arm Controls</legend><br>
+			<span class="control_label">Shoulder Joint</span>
+			<span class="arrow" id="raise_shoulder"><i class="ion-arrow-up-b"></i></span><br>
+			<span class="arrow" id="lower_shoulder"><i class="ion-arrow-down-b"></i></span><br>
+			<span class="control_label">Elbow Joint</span>
+			<span class="arrow" id="raise_elbow"><i class="ion-arrow-up-b"></i></span><br>
+			<span class="arrow" id="lower_elbow"><i class="ion-arrow-down-b"></i></span><br>
+			<span class="control_label">Claw</span>
+			<span class="leftlabel">Closed</span>
+			<input type="range" id="claw" name="claw" min="-100" max="100">
+			<span class="rightlabel">Open</span><br>
+
+		</fieldset>
 
 	</div>
 	<div class="actions" id="camera_action">
@@ -86,21 +87,24 @@
 
 	</div>
 	<div class="actions" id="metal_action">
-		Metal...
+		<fieldset class="md_controls">
+			<legend>Metal Detector</legend><br>
+			<span class="control_label">Raise/Lower</span>
+			<span class="arrow" id="raise_md"><i class="ion-arrow-up-b"></i></span><br>
+			<span class="arrow" id="lower_md"><i class="ion-arrow-down-b"></i></span><br>
+		</fieldset>
 
 	</div>
 	<div class="actions" id="settings_action">
-		Settings...
+		<fieldset class="user_settings">
+			<legend>User Settings</legend><br>
+			<span class="control_label">Page Background</span>
+			<input type="color" id="bg_color">
+			<span class="control_label">Text Color</span>
+			<input type="color" id="text_color">
 
-	</div>
-		
-	<div id="shutdown_modal" class="modalDialog">
-		<div>
-			<a href="#close" title="Close" class="close">X</a>
-			<h2>Confirm Shutdown</h2>
-			<p>Only click here if you're sure you want to shut down the MTAV:</p>
-			<a class="ion-power ionic shutdown" href="#close" id="shutdown_real" title="Shutdown"><i></i></a>
-		</div>
+		</fieldset>
+
 	</div>
 	<div id="dockContainer">
 		<div id="dockWrapper">

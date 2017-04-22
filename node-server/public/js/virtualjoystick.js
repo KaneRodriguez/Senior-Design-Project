@@ -310,6 +310,9 @@ VirtualJoystick.prototype._onMove	= function(x, y)
 
 VirtualJoystick.prototype._onMouseUp	= function(event)
 {
+	if (!$(".active_action").is("#home_action,#steering_action")) {
+		return;
+	}
 	return this._onUp();
 }
 
@@ -321,7 +324,7 @@ VirtualJoystick.prototype._onMouseDown	= function(event)
 	event.preventDefault();
 	var x	= event.clientX;
 	var y	= event.clientY;
-	return (y < .8 * document.body.scrollHeight ? this._onDown(x, y) : '');
+	return (((y < .75 * document.body.scrollHeight) && (y > .25 * document.body.scrollHeight)) ? this._onDown(x, y) : '');
 }
 VirtualJoystick.prototype._onMouseMove	= function(event)
 {
@@ -424,6 +427,9 @@ VirtualJoystick.prototype._stickInchToLocation	= function(locationX, locationY)
 
 VirtualJoystick.prototype._onTouchStart	= function(event)
 {
+	if (!$(".active_action").is("#home_action,#steering_action")) {
+		return;
+	}
 	// if there is already a touch inprogress do nothing
 	if( this._touchIdx !== null )	return;
 
@@ -443,11 +449,14 @@ VirtualJoystick.prototype._onTouchStart	= function(event)
 	// forward the action
 	var x		= touch.pageX;
 	var y		= touch.pageY;
-	return (y < .8 * document.body.scrollHeight ? this._onDown(x, y) : '');
+	return ((y < .75 * document.body.scrollHeight) && (y > .25 * document.body.scrollHeight) ? this._onDown(x, y) : '');
 }
 
 VirtualJoystick.prototype._onTouchEnd	= function(event)
 {
+	if (!$(".active_action").is("#home_action,#steering_action")) {
+		return;
+	}
 	// if there is no touch in progress, do nothing
 	if( this._touchIdx === null )	return;
 

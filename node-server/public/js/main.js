@@ -18,7 +18,7 @@
 /******* End Video Stuff ****/
 
 
-
+var closemodal = false;
 
 window.addEventListener("load", function() {
 	document.getElementById("shutdown_fake").style.color = "#0f0";
@@ -42,7 +42,7 @@ joystick.changeBaseColors(5, 6);
 		}
 	});
 }, false) }, 2000);
-$(".osx-dock li a").on("click touchstart", function() {
+$(".osx-dock li a:not(#invert)").on("click touchstart touchend", function() {
 	if (!$(this).is("#home,#steering")) {
 		$("#stickCanvas,#innerCanvas").hide();
 	} else {
@@ -84,4 +84,22 @@ $(document).ready(function() {
 			$(this).addClass("active")
 		});
 	});
+});
+$("#shutdown_fake").on("click", function() {
+	closemodal = true;
+});
+
+$(".close").on("click", function() {
+	if (closemodal) {
+		$("#modalDialog").hide();
+		closemodal = false;
+	}
+});
+
+$("#bg_color").on("input", function() {
+	document.body.style.backgroundColor = $(this).val();
+});
+
+$("#text_color").on("input", function() {
+	document.body.style.color = $(this).val();
 });
