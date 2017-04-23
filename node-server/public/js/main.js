@@ -103,7 +103,6 @@ $('#close_claw').on('mousedown touchstart', function() {
     clearInterval(interval);
 });
 
-var prevObj = null;
 
 function servoMotorCommand(servoObj, commandType) {
 	var servoStep = 3;
@@ -119,21 +118,17 @@ function servoMotorCommand(servoObj, commandType) {
 	} else if ( servoObj.positionPercentage <= 0) {
 		servoObj.positionPercentage = 0;
 	}
-	if(prevObj.id == serboObj.id && (prevObj.positionPercentage == serboObj.positionPercentage) ) {
-		// do nothing
-		
-	} else {
-		prevObj = servoObj;
-		console.log(servoObj);
-		// send via ajax
-		$.ajax({
-			url: '/servo-update',
-			type: 'POST',
-			data: {
-			servoMotor: servoObj
-			}
-		});
-	}
+
+	console.log(servoObj);
+	// send via ajax
+	$.ajax({
+		url: '/servo-update',
+		type: 'POST',
+		data: {
+		servoMotor: servoObj
+		}
+	});
+
 	
 
 }
