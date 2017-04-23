@@ -67,25 +67,23 @@ app.post('/tracks-update',function(req, res){
 
 app.post('/servo-update',function(req, res){
 	res.setHeader('Content-Type', 'application/json');
-	
 	/*
 	 * Servo :
-	 * 
 	 * - id
 	 * - position percentage
-	 * 
 	 */
 	
 	var servoMotor = req.body.servoMotor || null;
+             
 	//mimic a slow network connection
-	/*setTimeout(function(){
+	setTimeout(function(){
 
 		res.send(JSON.stringify({
-			tracks: tracks
+			servoMotor: servoMotor
 		}));
 
 	}, 1); //remove in future?
-*/
+
 	if(servoMotor) {
 		var id = servoMotor.id; 
 		var positionPercentage = servoMotor.positionPercentage;
@@ -122,17 +120,36 @@ var serialport = new SerialPort("/dev/ttyACM0", {
 serialport.on('open', function(){
   console.log('Serial Port Opened');
   serialport.on('data', function(data){
-
 			 console.log("data received:" + data);
-
 	});
 });
 function sendMotorUpdate(motorId, speed, direction) {
 		serialport.write('{"id":"' + motorId + '","direction":"' + direction +'","speedPercentage":' + speed +'}');
 }
 function sendServoMotorUpdate(id, positionPercentage) {
-		serialport.write('{"id":"' + id + '","positionPercentage":"' + positionPercentage +'"}');
+		if ( id == 'shoulder' ) {
+			positionPercentage = (positionPercentage >= 90 ? 90 : (positionPercentage <= 20 ? 20 : positionPercentage ) );
+		}
+		if ( id == 'claw' ) {
+			positionPercentage = (positionPercentage >= 73 ? 73 : (positionPercentage <= 25 ? 25 : positionPercentage ) );
+		}
+	    var cmd = '{"id":"' + id + '","positionPercentage":' + positionPercentage +'}';
+		console.log(cmd);
+		serialport.write(cmd);
 }
+/*
+var goZero = true;
+setInterval(function() {
+	goZero = !goZero;
+	var tmpVal = 1;
+	if(goZero) {
+		tmpVal = 1;
+	} else {
+		tmpVal = 30;
+	}
+	console.log(tmpVal);
+	sendMotorUpdate('motorA', tmpVal, 'forward');
+	sendMotorUpdate('motorB', tmpVal, 'forward');
 
-
-
+}, 5000);
+*/

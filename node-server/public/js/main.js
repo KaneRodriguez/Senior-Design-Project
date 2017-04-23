@@ -60,46 +60,58 @@ var metald = {
 
 var interval = null;
 
-$('#raise_shoulder').on('mousedown', function() {
+$('#raise_shoulder').on('mousedown touchstart', function() {
     interval = setInterval(function() {
 		servoMotorCommand(shoulder,'increase')
 	}, 150);
-}).on('mouseup mouseleave', function() {
+}).on('mouseup mouseleave touchend', function() {
     clearInterval(interval);
 });
-$('#lower_shoulder').on('mousedown', function() {
+$('#lower_shoulder').on('mousedown touchstart', function() {
     interval = setInterval(function() {
 		servoMotorCommand(shoulder,'decrease')
 	}, 150);
-}).on('mouseup mouseleave', function() {
+}).on('mouseup mouseleave touchend', function() {
     clearInterval(interval);
 });
-$('#raise_elbow').on('mousedown', function() {
+$('#raise_elbow').on('mousedown touchstart', function() {
     interval = setInterval(function() {
 		servoMotorCommand(elbow,'increase')
 	}, 150);
-}).on('mouseup mouseleave', function() {
+}).on('mouseup mouseleave touchend', function() {
     clearInterval(interval);
 });
-$('#lower_elbow').on('mousedown', function() {
+$('#lower_elbow').on('mousedown touchstart', function() {
     interval = setInterval(function() {
 		servoMotorCommand(elbow,'decrease')
 	}, 150);
-}).on('mouseup mouseleave', function() {
+}).on('mouseup mouseleave touchend', function() {
+    clearInterval(interval);
+});
+$('#open_claw').on('mousedown touchstart', function() {
+    interval = setInterval(function() {
+		servoMotorCommand(claw,'increase')
+	}, 150);
+}).on('mouseup mouseleave touchend', function() {
+    clearInterval(interval);
+});
+$('#close_claw').on('mousedown touchstart', function() {
+    interval = setInterval(function() {
+		servoMotorCommand(claw,'decrease')
+	}, 150);
+}).on('mouseup mouseleave touchend', function() {
     clearInterval(interval);
 });
 
-$('#claw').on('input change', function() {
-   claw.positionPercentage = $(this).val();
-   servoMotorCommand(claw,'')
-});
-
+var prevObj = null;
 
 function servoMotorCommand(servoObj, commandType) {
+	var servoStep = 3;
+	
 	if( commandType == 'increase' ) {
-		servoObj.positionPercentage++;
+		servoObj.positionPercentage = servoObj.positionPercentage + servoStep;
 	} else if ( commandType == 'decrease' ) {
-		servoObj.positionPercentage--;
+		servoObj.positionPercentage = servoObj.positionPercentage - servoStep;
 	}
 	
 	if ( servoObj.positionPercentage >= 100 ) {
@@ -107,17 +119,23 @@ function servoMotorCommand(servoObj, commandType) {
 	} else if ( servoObj.positionPercentage <= 0) {
 		servoObj.positionPercentage = 0;
 	}
-	
-	
-	console.log(servoObj);
-	// send via ajax
-		/*$.ajax({
+	if(prevObj.id == serboObj.id && (prevObj.positionPercentage == serboObj.positionPercentage) ) {
+		// do nothing
+		
+	} else {
+		prevObj = servoObj;
+		console.log(servoObj);
+		// send via ajax
+		$.ajax({
 			url: '/servo-update',
 			type: 'POST',
 			data: {
 			servoMotor: servoObj
 			}
-		});	*/
+		});
+	}
+	
+
 }
 
 /******* End Servo Stuff ****/
