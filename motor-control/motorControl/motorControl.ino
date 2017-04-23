@@ -113,7 +113,7 @@ bool commandReceived(char json[200]) {
     
     if(strcmp(id,"claw")==0) {
      claw.recieveSerialServoUpdates(root); // todo, pass in the JsonObject to the function
-    }                                                                                           //{"id":"camx", "positionPercentage":30}
+    }                                                                                           //Usage: {"id":"camx", "positionPercentage":30}
     if(strcmp(id,"elbow")==0) {
      elbow.recieveSerialServoUpdates(root); // todo, pass in the JsonObject to the function
     }

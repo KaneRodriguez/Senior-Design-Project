@@ -17,6 +17,91 @@
 
 /******* End Video Stuff ****/
 
+/******* Servo Stuff ****/
+
+/**
+			id
+				*	 - positionPercentage
+			
+			* 
+			* claw
+			* elbow
+			* shoulder
+			* camx
+			* camy
+			* metald
+*/
+// just to keep track of where everythings at for now
+
+var shoulder = {
+	id: 'shoulder',
+	positionPercentage: 0
+	};
+var claw = {
+	id: 'claw',
+	positionPercentage: 0
+	};
+var elbow = {
+	id: 'elbow',
+	positionPercentage: 0
+	};
+var camx = {
+	id: 'camx',
+	positionPercentage: 0
+	};
+var camy = {
+	id: 'camy',
+	positionPercentage: 0
+	};
+var metald = {
+	id: 'metald',
+	positionPercentage: 0
+	};
+$(document).on('click',function(){
+		console.log('clickeed doc');
+});
+var timeoutId = 0;
+$('#raise_shoulder').on('mousedown',function() {
+	timeoutId = setInterval(servoMotorCommand(shoulder,'increase'),100);
+}).on('mouseup mouseleave', function() {
+	clearTimeout(timeoutId);
+});
+$('#lower_shoulder').on('mousedown',function() {
+	servoMotorCommand(shoulder,'decrease')
+});
+$('#raise_elbow').on('mousedown',function() {
+	servoMotorCommand(elbow,'increase')
+});
+$('#lower_elbow').on('mousedown',function() {
+	servoMotorCommand(elbow,'decrease')
+});
+
+function servoMotorCommand(servoObj, commandType) {
+	if( commandType == 'increase' ) {
+		servoObj.positionPercentage++;
+	} else if ( commandType == 'decrease' ) {
+		servoObj.positionPercentage--;
+	}
+	
+	if ( servoObj.positionPercentage >= 100 ) {
+		servoObj.positionPercentage = 100;
+	} else if ( servoObj.positionPercentage <= 0) {
+		servoObj.positionPercentage = 0;
+	}
+	
+	
+	console.log(servoObj);
+	// send via ajax
+		$.ajax({
+			url: '/servo-update',
+			type: 'POST',
+			data: {
+			servoMotor: servoObj
+			}
+		});	
+}
+
+/******* End Servo Stuff ****/
 
 var closemodal = false;
 

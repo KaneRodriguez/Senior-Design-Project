@@ -743,7 +743,7 @@ VirtualJoystick.prototype._updateTracks = function() {
 			right: Math.floor(L)
 		};
 		
-		console.log(this._tracks);
+		// console.log(this._tracks);
 		//make the AJAX call
 		$.ajax({
 			url: '/tracks-update',

@@ -65,6 +65,35 @@ app.post('/tracks-update',function(req, res){
 // good luck?
 });
 
+app.post('/servo-update',function(req, res){
+	res.setHeader('Content-Type', 'application/json');
+	
+	/*
+	 * Servo :
+	 * 
+	 * - id
+	 * - position percentage
+	 * 
+	 */
+	
+	var servoMotor = req.body.servoMotor || null;
+	//mimic a slow network connection
+	/*setTimeout(function(){
+
+		res.send(JSON.stringify({
+			tracks: tracks
+		}));
+
+	}, 1); //remove in future?
+*/
+	if(servoMotor) {
+		var id = servoMotor.id; 
+		var positionPercentage = servoMotor.positionPercentage;
+
+		sendServoMotorUpdate(id, positionPercentage);
+	}
+});
+
 app.post('/shutdown',function(req, res){
 	var shutdown = req.body.shutdown || null;
 
@@ -76,7 +105,7 @@ app.post('/shutdown',function(req, res){
 });
 
 //wait for a connection
-app.listen(80, '0.0.0.0', function () {
+app.listen(8080, function () {
   console.log('Server is running. Point your browser to: http://localhost:3000');
 });
 
@@ -101,7 +130,9 @@ serialport.on('open', function(){
 function sendMotorUpdate(motorId, speed, direction) {
 		serialport.write('{"id":"' + motorId + '","direction":"' + direction +'","speedPercentage":' + speed +'}');
 }
-
+function sendServoMotorUpdate(id, positionPercentage) {
+		serialport.write('{"id":"' + id + '","positionPercentage":"' + positionPercentage +'"}');
+}
 
 
 
