@@ -84,13 +84,13 @@ void MTAVServo::updateServo() {
 
   int difference = this->getMax() - this->getMin(); //MAX_MTAVSERVO_POSITION - MIN_MTAVSERVO_POSITION;
   int pos = this->getServoPositionPercentage() * difference / 100 + this->getMin(); //MIN_MTAVSERVO_POSITION;
-    Serial.println(this->getServoPositionPercentage());
+  //  Serial.println(this->getServoPositionPercentage());
 
-  Serial.println(this->getMax());
+  //Serial.println(this->getMax());
 
-  Serial.println(this->getMin());
+  //Serial.println(this->getMin());
 
-  Serial.println(pos);
+  //Serial.println(pos);
   this->controller->setPWM(this->getBoardNumber(), 0, pos); // TODO: Why 0?????????
 }
 

@@ -12,11 +12,16 @@ MTAVMotor motorB("motorB", "forward", 0);
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
 MTAVServo claw("claw", 0, 0, &pwm, 120, 420);
-MTAVServo elbow("elbow", 1, 0, &pwm, 120, 440);
-MTAVServo shoulder("shoulder", 2, 0, &pwm, 120, 440);
-MTAVServo camx("camx", 3, 0, &pwm, 120, 440);
-MTAVServo camy("camy", 4, 0, &pwm, 120, 440);
-MTAVServo metald("metald", 5, 0, &pwm, 120, 440);
+MTAVServo elbow("elbow", 1, 0, &pwm, 150, 292);
+MTAVServo shoulder("shoulder", 2, 0, &pwm, 150, 292);
+MTAVServo camx("camx", 3, 0, &pwm, 120, 420);
+MTAVServo camy("camy", 4, 0, &pwm, 120, 420);
+MTAVServo metald("metald", 5, 0, &pwm, 90, 400);          
+
+/*Parallax servos are : 90-400
+  micro servos are    : 120-420
+  HS-5495BH servos are: 150-292 
+ */
 
 String userCommand = "";
 
@@ -108,7 +113,7 @@ bool commandReceived(char json[200]) {
     
     if(strcmp(id,"claw")==0) {
      claw.recieveSerialServoUpdates(root); // todo, pass in the JsonObject to the function
-    }                                                                                           //{"id":"claw", "positionPercentage":30}
+    }                                                                                           //{"id":"camx", "positionPercentage":30}
     if(strcmp(id,"elbow")==0) {
      elbow.recieveSerialServoUpdates(root); // todo, pass in the JsonObject to the function
     }
