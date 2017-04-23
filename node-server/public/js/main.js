@@ -10,7 +10,7 @@
 
 
 		// Setup the WebSocket connection and start the player
-		var client = new WebSocket('ws://doesitreallymatter:8084/');
+		var client = new WebSocket('ws://doesitreallymatter.com:8084/');
 		var player = new jsmpeg(client, {canvas:videoCanvas});
 
 		
