@@ -57,24 +57,43 @@ var metald = {
 	id: 'metald',
 	positionPercentage: 0
 	};
-$(document).on('click',function(){
-		console.log('clickeed doc');
-});
-var timeoutId = 0;
-$('#raise_shoulder').on('mousedown',function() {
-	timeoutId = setInterval(servoMotorCommand(shoulder,'increase'),100);
+
+var interval = null;
+
+$('#raise_shoulder').on('mousedown', function() {
+    interval = setInterval(function() {
+		servoMotorCommand(shoulder,'increase')
+	}, 150);
 }).on('mouseup mouseleave', function() {
-	clearTimeout(timeoutId);
+    clearInterval(interval);
 });
-$('#lower_shoulder').on('mousedown',function() {
-	servoMotorCommand(shoulder,'decrease')
+$('#lower_shoulder').on('mousedown', function() {
+    interval = setInterval(function() {
+		servoMotorCommand(shoulder,'decrease')
+	}, 150);
+}).on('mouseup mouseleave', function() {
+    clearInterval(interval);
 });
-$('#raise_elbow').on('mousedown',function() {
-	servoMotorCommand(elbow,'increase')
+$('#raise_elbow').on('mousedown', function() {
+    interval = setInterval(function() {
+		servoMotorCommand(elbow,'increase')
+	}, 150);
+}).on('mouseup mouseleave', function() {
+    clearInterval(interval);
 });
-$('#lower_elbow').on('mousedown',function() {
-	servoMotorCommand(elbow,'decrease')
+$('#lower_elbow').on('mousedown', function() {
+    interval = setInterval(function() {
+		servoMotorCommand(elbow,'decrease')
+	}, 150);
+}).on('mouseup mouseleave', function() {
+    clearInterval(interval);
 });
+
+$('#claw').on('input change', function() {
+   claw.positionPercentage = $(this).val();
+   servoMotorCommand(claw,'')
+});
+
 
 function servoMotorCommand(servoObj, commandType) {
 	if( commandType == 'increase' ) {
@@ -92,13 +111,13 @@ function servoMotorCommand(servoObj, commandType) {
 	
 	console.log(servoObj);
 	// send via ajax
-		$.ajax({
+		/*$.ajax({
 			url: '/servo-update',
 			type: 'POST',
 			data: {
 			servoMotor: servoObj
 			}
-		});	
+		});	*/
 }
 
 /******* End Servo Stuff ****/
