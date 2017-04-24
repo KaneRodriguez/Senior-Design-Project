@@ -104,14 +104,14 @@ $('#lower_camy').on('mousedown touchstart', function() {
 });
 $('#raise_camx').on('mousedown touchstart', function() {
     interval = setInterval(function() {
-		servoMotorCommand(camx,'decrease')
+		servoMotorCommand(camx,'increase')
 	}, 150);
 }).on('mouseup mouseleave touchend', function() {
     clearInterval(interval);
 });
 $('#raise_camy').on('mousedown touchstart', function() {
     interval = setInterval(function() {
-		servoMotorCommand(camy,'decrease')
+		servoMotorCommand(camy,'increase')
 	}, 150);
 }).on('mouseup mouseleave touchend', function() {
     clearInterval(interval);

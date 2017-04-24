@@ -765,10 +765,23 @@ VirtualJoystick.prototype._updateTracks = function() {
 	*/
 	var X = - ( deltaX);
 	var Y = deltaY;
-	var V =(100-Math.abs(X)) * (Y/100) + Y;
-	var W = (100-Math.abs(Y)) * (X/100) + X;
+	var V =(this._stickRadius-Math.abs(X)) * (Y/this._stickRadius) + Y;
+	var W = (this._stickRadius-Math.abs(Y)) * (X/this._stickRadius) + X;
 	var R = (V+W) /2;
 	var L = (V-W)/2;
+	
+	// normalize to 100
+	this._stickRadius 
+	/*
+	    100% = R / radius * 100
+	
+	*/
+	R = R / this._stickRadius * 100;
+	L = L / this._stickRadius * 100;
+
+	
+	
+	
 	
 	if( this._tracks.left != Math.floor(R) && this._tracks.right != Math.floor(L)) 
 	{
