@@ -35,27 +35,27 @@
 
 var shoulder = {
 	id: 'shoulder',
-	positionPercentage: 0
+	positionPercentage: 50
 	};
 var claw = {
 	id: 'claw',
-	positionPercentage: 0
+	positionPercentage: 50
 	};
 var elbow = {
 	id: 'elbow',
-	positionPercentage: 0
+	positionPercentage: 50
 	};
 var camx = {
 	id: 'camx',
-	positionPercentage: 0
+	positionPercentage: 50
 	};
 var camy = {
 	id: 'camy',
-	positionPercentage: 0
+	positionPercentage: 50
 	};
 var metald = {
 	id: 'metald',
-	positionPercentage: 0
+	positionPercentage: 50
 	};
 
 var interval = null;

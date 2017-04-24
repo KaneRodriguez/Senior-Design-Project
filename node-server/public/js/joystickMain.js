@@ -9,7 +9,7 @@ var joystickOpts = {
 	strokeStyle : '#0f0',
 	baseStrokeStyle: 'green',
 	limitStickTravel: true,
-	stickRadius: 50,
+	stickRadius: beginY,
 	stationaryBase: true,
 	baseX: beginX,
 	baseY: beginY,

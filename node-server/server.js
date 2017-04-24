@@ -114,29 +114,27 @@ function sendMotorUpdate(motorId, speed, direction) {
 		serialport.write('{"id":"' + motorId + '","direction":"' + direction +'","speedPercentage":' + speed +'}');
 }
 function sendServoMotorUpdate(id, positionPercentage) {
-		if ( id == 'shoulder' ) {
+		/*if ( id == 'shoulder' ) {
 			positionPercentage = (positionPercentage >= 90 ? 90 : (positionPercentage <= 20 ? 20 : positionPercentage ) );
 		}
 		if ( id == 'claw' ) {
 			positionPercentage = (positionPercentage >= 73 ? 73 : (positionPercentage <= 25 ? 25 : positionPercentage ) );
-		}
+		}*/
 	    var cmd = '{"id":"' + id + '","positionPercentage":' + positionPercentage +'}';
-		console.log(cmd);
+		// console.log(cmd);
 		serialport.write(cmd);
 }
 /*
-var goZero = true;
+var tmpVal = 5;
 setInterval(function() {
-	goZero = !goZero;
-	var tmpVal = 1;
-	if(goZero) {
-		tmpVal = 1;
+	if(tmpVal > 30) {
+		tmpVal = 5;
 	} else {
-		tmpVal = 30;
+		tmpVal= tmpVal + 4;
 	}
 	console.log(tmpVal);
-	sendMotorUpdate('motorA', tmpVal, 'forward');
 	sendMotorUpdate('motorB', tmpVal, 'forward');
-
-}, 5000);
+	sendMotorUpdate('motorA', tmpVal, 'forward');
+}, 3000);
 */
+// {"id":"motorB","direction":"forward","speedPercentage":9}

@@ -337,3 +337,7 @@ label {
 .ion-arrow-left-b {
 	padding-right: 1.5em
 }
+.ion-arrow-left-b {
+	color: green;
+	background: green;
+}
