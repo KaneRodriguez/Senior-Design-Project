@@ -6,11 +6,12 @@ var VirtualJoystick	= function(opts)
 	this._container		= opts.container	|| document.body;
 	this._strokeStyle	= opts.strokeStyle	|| 'cyan';
     this._baseStrokeStyle = opts.baseStrokeStyle || this._strokeStyle;
+	this._usePreloaderBase = opts.usePreloaderBase || false;
 	this._usePreloaderStick = opts.usePreloaderStick || false;
 	this._stickAnimateBackToBase = opts.stickAnimateBackToBase || false;
 	this._stickAnimateToLocation = opts.stickAnimateToLocation || false;
 	
-	this._preloader = new MyPreloader({radius: 20, quantity: 6, orbitRadius: 20, radiusScaleMax: 4.5, colorMin: 95, colorMax: 105, speedFactor: 15});
+	this._preloader = new MyPreloader({inactive: true, radius: 20, quantity: 6, orbitRadius: 20, radiusScaleMax: 4.5, colorMin: 95, colorMax: 105, speedFactor: 15});
 	this._baseCanvas = this._preloader._canvas;
 	
 	this._stickPreloader = new MyPreloader({inactive: true, radius: 15, orbitRadius: 15, quantity: 20, colorMin: 95, colorMax: 105, speedFactor: 8});
@@ -508,7 +509,23 @@ VirtualJoystick.prototype._onTouchMove	= function(event)
  */
 VirtualJoystick.prototype._buildJoystickBase	= function()
 {
-	var canvas	= this._baseCanvas;
+	var canvas	= document.createElement( 'canvas' );
+	
+	if(this._usePreloaderBase)
+	{
+		canvas = this._baseCanvas;
+	} else {
+		var tmpRad = 0.5;
+		canvas.id = "innerCanvas";
+		canvas.width	= 172;
+		canvas.height	= 172;
+		var ctx		= canvas.getContext('2d');
+		ctx.beginPath();
+		ctx.strokeStyle	= this._baseStrokeStyle; 
+		ctx.lineWidth	= 6; 
+		ctx.arc( canvas.width/2, canvas.width/2, tmpRad, 0, Math.PI*2, true); 
+		ctx.stroke();
+	}
 	
 	return canvas;
 }
@@ -525,6 +542,7 @@ VirtualJoystick.prototype._buildJoystickStick	= function()
 		canvas = this._stickCanvas;
 		
 	} else {
+		var tmpRad = 5;
 		canvas.id = "stickCanvas";
 		canvas.width	= 172;
 		canvas.height	= 172;
@@ -532,7 +550,7 @@ VirtualJoystick.prototype._buildJoystickStick	= function()
 		ctx.beginPath(); 
 		ctx.strokeStyle	= this._strokeStyle; 
 		ctx.lineWidth	= 6; 
-		ctx.arc( canvas.width/2, canvas.width/2, 80, 0, Math.PI*2, true); 
+		ctx.arc( canvas.width/2, canvas.width/2, tmpRad, 0, Math.PI*2, true); 
 		ctx.stroke();
 	}
 	
@@ -545,6 +563,7 @@ VirtualJoystick.prototype.changeJoystickStickColor	= function(min, max)
    if( this._usePreloaderStick ) {
 	  	this._stickPreloader._changeColors(min, max); 
    } else {
+	   	var tmpRad = 20;
 	    var newColor = get_random_color(min, max) || 'green'
 		var canvas = this._stickEl
 		canvas.width	= 172;
@@ -555,7 +574,7 @@ VirtualJoystick.prototype.changeJoystickStickColor	= function(min, max)
 		ctx.beginPath(); 
 		ctx.strokeStyle	= newColor; 
 		ctx.lineWidth	= 6; 
-		ctx.arc( canvas.width/2, canvas.height/2, 80, 0, Math.PI*2, true); 
+		ctx.arc( canvas.width/2, canvas.height/2, tmpRad, 0, Math.PI*2, true); 
 		ctx.stroke();
 	}
 
@@ -571,8 +590,23 @@ function get_random_color(min, max) {
     return 'hsl(' + h + ',' + s + '%,' + l + '%)';
 }
 VirtualJoystick.prototype.changeJoystickBaseColor	= function(min, max)
-{		
-	this._preloader._changeColors(min, max);
+{	
+	if(this._usePreloaderBase) {
+		this._preloader._changeColors(min, max);
+	} else {
+			var newColor = get_random_color(min, max) || 'green'
+			var canvas = this._baseEl;
+			canvas.width	= 172;
+			canvas.height	= 172;
+			
+			var ctx = canvas.getContext('2d');
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			ctx.beginPath(); 
+			ctx.strokeStyle	= newColor; 
+			ctx.lineWidth	= 6; 
+			ctx.arc( canvas.width/2, canvas.height/2, 80, 0, Math.PI*2, true); 
+			ctx.stroke();	
+	}
 }
 
 VirtualJoystick.prototype._init	= function(opts) {
@@ -743,7 +777,7 @@ VirtualJoystick.prototype._updateTracks = function() {
 			right: Math.floor(L)
 		};
 		
-		// console.log(this._tracks);
+		console.log(this._tracks);
 		//make the AJAX call
 		$.ajax({
 			url: '/tracks-update',
@@ -760,7 +794,7 @@ VirtualJoystick.prototype._updateTracks = function() {
 	
 	var percentageOfOverallSpeed = Math.sqrt(deltaX * deltaX + deltaY * deltaY ) / this._stickRadius;
 	
-	if( this._colorsMatchTrackSpeed ) {
+	if( false && this._colorsMatchTrackSpeed ) {
 		// console.log("PercentOverallSpeed: " + percentageOfOverallSpeed);
 		var changeFlag = Math.floor((percentageOfOverallSpeed * maxColor) / step);
 		
