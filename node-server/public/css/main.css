@@ -78,13 +78,9 @@ ul.osx-dock li a img {
 @media screen and (min-width: 760px) {
 	#shutdown_fake {
 		position: absolute;
-		left: 40%;
-		bottom: -15%;
 	}
 	#invert {
 		position: absolute;
-		left: 40%;
-		bottom: -15%;
 		z-index: 10;
 		font-size: 2.5em;
 	}
@@ -303,6 +299,9 @@ label {
 	fieldset {
 		width: 95%
 	}
+	.arm_controls {
+		height: 70%
+	}
 	.input[type=range] {
 		width: 20%;
 	}
@@ -317,6 +316,10 @@ label {
 		z-index: 10;
 		font-size: 1.5em;
 	}
+	ul.osx-dock li {
+		padding-right: 0px
+	}
+
 }
 .control_label {
 	display: block;

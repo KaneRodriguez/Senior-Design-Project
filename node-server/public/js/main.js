@@ -139,6 +139,8 @@ function servoMotorCommand(servoObj, commandType) {
 		servoObj.positionPercentage += servoStep;
 	} else if ( commandType == 'decrease' ) {
 		servoObj.positionPercentage -= servoStep;
+	} else if ( commandType == 'straight' ) {
+		servoObj.positionPercentage = 100;
 	}
 	
 	if ( servoObj.positionPercentage >= 100 ) {
@@ -146,7 +148,6 @@ function servoMotorCommand(servoObj, commandType) {
 	} else if ( servoObj.positionPercentage <= 0) {
 		servoObj.positionPercentage = 0;
 	}
-	
 	
 	console.log(servoObj);
 	// send via ajax
@@ -245,4 +246,9 @@ $("#bg_color").on("input", function() {
 
 $("#text_color").on("input", function() {
 	document.body.style.color = $(this).val();
+});
+
+$("#arm_straight").on("click", function() {
+	servoMotorCommand(shoulder,'straight');
+	servoMotorCommand(elbow,'straight');
 });

@@ -8,6 +8,9 @@
 		<link rel="stylesheet" type="text/css" href="./css/preloader.css">
 		<link rel="stylesheet" type="text/css" href="./css/radar.css">
 		<style>
+			.osx-dock li {
+	               padding-right: 1.5em;
+	           }
 	           .osx-dock li a:not(.ionic) {
 	               position: absolute;
 	               z-index: 10;
@@ -68,6 +71,7 @@
 	<div class="actions" id="arm_action">
 		<fieldset class="arm_controls">
 			<legend>Arm Controls</legend><br>
+			<span class="control_label" id="straight_arm">Click to make arm stand up</span>
 			<span class="control_label">Shoulder Joint</span>
 			<span class="arrow" id="raise_shoulder"><i class="ion-arrow-up-b"></i></span><br>
 			<span class="arrow" id="lower_shoulder"><i class="ion-arrow-down-b"></i></span><br>
