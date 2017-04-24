@@ -328,3 +328,14 @@ label {
 	margin-bottom: 1em;
 	text-decoration: underline
 }
+#camera_action fieldset {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 70%;
+	right: 0;
+	height: 20%;
+}
+.ion-arrow-left-b {
+	padding-right: 1.5em
+}

@@ -88,6 +88,34 @@ $('#lower_elbow').on('mousedown', function() {
 }).on('mouseup mouseleave', function() {
     clearInterval(interval);
 });
+$('#lower_camx').on('mousedown', function() {
+    interval = setInterval(function() {
+		servoMotorCommand(camx,'decrease')
+	}, 150);
+}).on('mouseup mouseleave', function() {
+    clearInterval(interval);
+});
+$('#lower_camy').on('mousedown', function() {
+    interval = setInterval(function() {
+		servoMotorCommand(camy,'decrease')
+	}, 150);
+}).on('mouseup mouseleave', function() {
+    clearInterval(interval);
+});
+$('#raise_camx').on('mousedown', function() {
+    interval = setInterval(function() {
+		servoMotorCommand(camx,'decrease')
+	}, 150);
+}).on('mouseup mouseleave', function() {
+    clearInterval(interval);
+});
+$('#raise_camy').on('mousedown', function() {
+    interval = setInterval(function() {
+		servoMotorCommand(camy,'decrease')
+	}, 150);
+}).on('mouseup mouseleave', function() {
+    clearInterval(interval);
+});
 
 $('#claw').on('input change', function() {
    claw.positionPercentage = $(this).val();
