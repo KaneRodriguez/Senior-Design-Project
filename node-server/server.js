@@ -53,7 +53,7 @@ app.post('/tracks-update',function(req, res){
 			speedMotorB = 1;
 		}
 
-
+       
 
 
 		sendMotorUpdate("motorA", speedMotorA, directionMotorA);
@@ -103,7 +103,7 @@ app.post('/shutdown',function(req, res){
 });
 
 //wait for a connection
-app.listen(8080, function () {
+app.listen(80, '0.0.0.0', function () {
   console.log('Server is running. Point your browser to: http://localhost:3000');
 });
 
