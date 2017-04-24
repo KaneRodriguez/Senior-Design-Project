@@ -48,8 +48,7 @@ div.cap.right {
 ul.osx-dock {
 	display: inline-block;
 	height: 130px;
-	padding: 0 40px 0 0;
-	background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/151734/dock-background-left.png) no-repeat right bottom;
+	padding: 0 1em;
 	overflow: hidden;
 	margin: 0 0 0 40px;
 }
@@ -57,7 +56,7 @@ ul.osx-dock li {
 	display: block;
 	position: relative;
 	float: left;
-	width: 30px;
+    width: 2em;
 	height: 50px;
 	margin: 90px 0 10px 0;
 	-webkit-transition: 0.15s linear;
@@ -93,7 +92,6 @@ ul.osx-dock li a img {
 		display: block;
 		position: relative;
 		float: left;
-		width: 50px;
 		height: 50px;
 		margin: 60px 0 4px 0;
 		-webkit-transition: 0.15s linear;
@@ -154,7 +152,6 @@ div#dockWrapper {
 	width: auto;
 	display: inline-block;
 	position: relative;
-	border-bottom: solid 2px rgba(255, 255, 255, .35);
 	line-height: 0;
 }
 #dockContainer, #dockContainer * {
@@ -311,13 +308,11 @@ label {
 	}
 	#shutdown_fake {
 		position: absolute;
-		left: 100%;
 		bottom: 0%;
 		font-size: 1.5em;
 	}
 	#invert {
 		position: absolute;
-		left: 100%;
 		bottom: 0%;
 		z-index: 10;
 		font-size: 1.5em;
