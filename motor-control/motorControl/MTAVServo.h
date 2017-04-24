@@ -26,13 +26,18 @@ class MTAVServo
     }
     int getMin() { return this->itsMin;}
     int getMax() { return this->itsMax;}
-
+    int getCurrentPos() {
+      return this->itsCurrentPos;
+    }
     
     // Set
     void setServoId(String id);
     void setServoPositionPercentage(int positionPercentage);
     void setBoardNumber(int boardNum) {
       this->itsBoardNumber = boardNum;
+    }
+    void setCurrentPos(int pos) {
+      this->itsCurrentPos = pos;
     }
     void setServoMin(int Min);
     void setServoMax(int Max);
@@ -49,6 +54,7 @@ Adafruit_PWMServoDriver* controller;
     int itsPositionPercentage; // 0 to 100
     int itsMin; // found by iteration (different per servo)
     int itsMax; // found by iteration (different per servo)
+    int itsCurrentPos;
 };
 
 MTAVServo::MTAVServo(String id, int boardNumber, int positionPercentage, Adafruit_PWMServoDriver * controller, int Min, int Max) {
@@ -56,11 +62,15 @@ MTAVServo::MTAVServo(String id, int boardNumber, int positionPercentage, Adafrui
   this->setServoId(id);
   this->setServoPositionPercentage(positionPercentage);
   this->setBoardNumber(boardNumber);
-  
   this->setServoMin(Min);
   this->setServoMax(Max);
   
   // NOTE: DO NOT UPDATE HERE
+  int difference = this->getMax() - this->getMin(); //MAX_MTAVSERVO_POSITION - MIN_MTAVSERVO_POSITION;
+  int pos = this->getServoPositionPercentage() * difference / 100 + this->getMin(); //MIN_MTAVSERVO_POSITION;
+  this->setCurrentPos(pos);
+
+  
 }
 
 void MTAVServo::setServoId(String id) {
@@ -81,17 +91,21 @@ void MTAVServo::updateServo() {
   // (board number, ?????????, pulse length)
 
   // quickly turn the percentage into actual value
-
   int difference = this->getMax() - this->getMin(); //MAX_MTAVSERVO_POSITION - MIN_MTAVSERVO_POSITION;
   int pos = this->getServoPositionPercentage() * difference / 100 + this->getMin(); //MIN_MTAVSERVO_POSITION;
-  //  Serial.println(this->getServoPositionPercentage());
 
-  //Serial.println(this->getMax());
-
-  //Serial.println(this->getMin());
-
-  //Serial.println(pos);
-  this->controller->setPWM(this->getBoardNumber(), 0, pos); // TODO: Why 0?????????
+  if ( pos > this->getCurrentPos() ) {
+      // we are going up!
+        for (uint16_t pulselen = this->getCurrentPos(); pulselen < pos; pulselen++) {
+          this->controller->setPWM(this->getBoardNumber(), 0, pulselen); // TODO: Why 0?????????
+        }
+  } else if ( pos < this->getCurrentPos() ) {
+      // we are going down!!
+        for (uint16_t pulselen = this->getCurrentPos(); pulselen > pos; pulselen--) {
+          this->controller->setPWM(this->getBoardNumber(), 0, pulselen); // TODO: Why 0?????????
+        }
+  }
+  this->setCurrentPos(pos);  
 }
 
 void MTAVServo::displayServoSpecs() {
@@ -122,8 +136,8 @@ bool MTAVServo::recieveSerialServoUpdates(JsonObject& root) {
   // Fetch values.
   const char * id = root["id"];
   int positionPercentage = root["positionPercentage"];
-   Serial.println(id);
-  Serial.println(positionPercentage);
+  // Serial.println(id);
+  // Serial.println(positionPercentage);
   this->setServoPositionPercentage(positionPercentage);
   // this->sendSerialServoSpecs();
 

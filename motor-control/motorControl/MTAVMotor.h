@@ -88,9 +88,9 @@ void MTAVMotor::setMotorDirection(String dir) {
     }
 }
 void MTAVMotor::setMotorSpeedPercentage(int speedPercentage) {
-  if(speedPercentage) {
-    this->itsSpeedPercentage = ( speedPercentage >= 100 ? 100 :  ( speedPercentage <= 0 ? 0 : speedPercentage ) ); // between 0 and 100 percent (obviously)
-  }
+    if(speedPercentage >= 0) {
+      this->itsSpeedPercentage = ( speedPercentage >= 100 ? 100 :  ( speedPercentage <= 0 ? 0 : speedPercentage ) ); // between 0 and 100 percent (obviously)
+    }
 }
 
 void MTAVMotor::setMotorRpwm(int rpwm) {
@@ -112,8 +112,6 @@ void MTAVMotor::stopMotor() {
 void MTAVMotor::updateMotor() {
   // update the motor speed and direction here
   
-  // TODO: This is where you will implement the logic for gradually shifting from forward to reverse (instead of immediately)
-
   // keep in mind that this speed is on an inverse scale of the MAX. Meaning, 0 is the fastest, MAX is the slowest...
   int speed = MAX_MTAVMOTOR_SPEED - ( ((float)this->getMotorSpeedPercentage()/100) * MAX_MTAVMOTOR_SPEED); // SPECIAL CASE: The Max is when the motor is stopped
   String direction = this->getMotorDirection();

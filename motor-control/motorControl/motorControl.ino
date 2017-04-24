@@ -11,12 +11,12 @@ MTAVMotor motorB("motorB", "forward", 0);
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
-MTAVServo claw("claw", 0, 0, &pwm, 120, 420);
-MTAVServo elbow("elbow", 1, 0, &pwm, 150, 292);
-MTAVServo shoulder("shoulder", 2, 0, &pwm, 150, 292);
-MTAVServo camx("camx", 3, 0, &pwm, 120, 420);
-MTAVServo camy("camy", 4, 0, &pwm, 120, 420);
-MTAVServo metald("metald", 5, 0, &pwm, 90, 400);          
+MTAVServo claw("claw", 0, 0, &pwm, 150, 600);
+MTAVServo elbow("elbow", 1, 0, &pwm, 150, 600);
+MTAVServo shoulder("shoulder", 2, 0, &pwm, 150, 600);
+MTAVServo camx("camx", 3, 0, &pwm, 150, 600);
+MTAVServo camy("camy", 4, 0, &pwm, 150, 600);
+MTAVServo metald("metald", 5, 0, &pwm, 150, 600);          
 
 /*Parallax servos are : 90-400
   micro servos are    : 120-420
@@ -24,15 +24,17 @@ MTAVServo metald("metald", 5, 0, &pwm, 90, 400);
  */
 
 String userCommand = "";
-
+char globalJson[200];
+const int MAX_COMMAND_LENGTH = 60;
+int ARDUINO_READY = 0;
 /************** End Global Variable Initialization ****************/
 
 /*********************** General Setup ***********************/
 void setup() {
   Serial.begin(9600);      // open the serial port at 9600 bps:
-  Serial.println("Arduino setting up! \n");
+  Serial.println("Arduino setting up yall! \n");
 
-  pwm.begin();
+ pwm.begin();
   
   pwm.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
 
@@ -54,13 +56,11 @@ void setup() {
   // reserve 200 bytes for the userCommand (consider lowering):
   userCommand.reserve(200);
 
-  Serial.println("Arduino set up! \n");
-
   // motorA.sendSerialMotorSpecs();
 
   delay(3000);
 
-
+  ARDUINO_READY = 1;
 }
 /*********************** End General Setup ***********************/
 
@@ -71,15 +71,15 @@ void loop() { // main
   // update motors
   motorA.updateMotor();
   motorB.updateMotor();
-
   // update servos
+  
   claw.updateServo();
   elbow.updateServo();
   shoulder.updateServo();
   camx.updateServo();
   camy.updateServo();
   metald.updateServo();
-  
+
 }
 
 /**************************** End Main **********************************/
@@ -87,19 +87,17 @@ void loop() { // main
 
 
 /************ Communication with the Pi ***************/
-bool commandReceived(char json[200]) {
+bool commandReceived() {
   StaticJsonBuffer<200> jsonBuffer;
 
-  JsonObject& root = jsonBuffer.parseObject(json);
-      Serial.println("bout to parse obje");
-
+  JsonObject& root = jsonBuffer.parseObject(globalJson);
+  
   // Test if parsing succeeds.
   if (!root.success()) {
    // Serial.println("parseObject() failed");
     return false;
   }
-      Serial.println("parsed obje");
-
+  root.printTo(Serial);  
   const char * id = root["id"]; // TODO: error check if there is an "id" attribute
  
   
@@ -134,25 +132,35 @@ bool commandReceived(char json[200]) {
 }
 
 
-
+int errorFlag = 0;
 void serialEvent() {
-  while (Serial.available()) {
-    // get the new byte:
-    char inChar = (char)Serial.read();
-
-    userCommand += inChar;
-
-    // add it to the inputString:
-    if (inChar == '}') { // could potentially be the end of the object
-      char json[200];
-      userCommand.toCharArray(json, 200);
-      
-      if (commandReceived(json)) {
-        // Serial.println("CR");
-        userCommand = "";
-        delay(100);
+  if(ARDUINO_READY) {
+    while (Serial.available()) {
+      // get the new byte:
+  
+      char inChar = (char)Serial.read();
+      if( errorFlag == 0) {
+          userCommand += inChar;
+      } else if( inChar == '{' ) {
+        errorFlag = 0;
+        userCommand += inChar;
       } else {
-        Serial.println("Command not received");
+        // ignore junk
+      }
+  
+      if (userCommand.length() > MAX_COMMAND_LENGTH) { // REMINDER: IF COMMANDS LONGER THAN 60, CHANGE
+        userCommand = "";
+        errorFlag = 1;
+      }
+      
+      // add it to the inputString:
+      if (inChar == '}') { // could potentially be the end of the object
+        userCommand.toCharArray(globalJson, 200);
+        if (commandReceived()) {
+          userCommand = "";
+        } else {
+          
+        }
       }
     }
   }
