@@ -300,7 +300,7 @@ label {
 	width: 50px;
 }
 .arrow {
-	font-size: 2em
+	font-size: 3em
 }
 @media screen and (max-width: 760px) {
 	fieldset {
@@ -334,7 +334,7 @@ label {
 	left: 0;
 	bottom: 70%;
 	right: 0;
-	height: 20%;
+	height: 25%;
 }
 .ion-arrow-left-b {
 	padding-right: 1.5em

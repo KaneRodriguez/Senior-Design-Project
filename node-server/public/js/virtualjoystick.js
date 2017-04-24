@@ -526,13 +526,13 @@ VirtualJoystick.prototype._buildJoystickStick	= function()
 		
 	} else {
 		canvas.id = "stickCanvas";
-		canvas.width	= 86;
-		canvas.height	= 86;
+		canvas.width	= 172;
+		canvas.height	= 172;
 		var ctx		= canvas.getContext('2d');
 		ctx.beginPath(); 
 		ctx.strokeStyle	= this._strokeStyle; 
 		ctx.lineWidth	= 6; 
-		ctx.arc( canvas.width/2, canvas.width/2, 40, 0, Math.PI*2, true); 
+		ctx.arc( canvas.width/2, canvas.width/2, 80, 0, Math.PI*2, true); 
 		ctx.stroke();
 	}
 	
@@ -547,15 +547,15 @@ VirtualJoystick.prototype.changeJoystickStickColor	= function(min, max)
    } else {
 	    var newColor = get_random_color(min, max) || 'green'
 		var canvas = this._stickEl
-		canvas.width	= 86;
-		canvas.height	= 86;
+		canvas.width	= 172;
+		canvas.height	= 172;
 		
 		var ctx = canvas.getContext('2d');
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.beginPath(); 
 		ctx.strokeStyle	= newColor; 
 		ctx.lineWidth	= 6; 
-		ctx.arc( canvas.width/2, canvas.height/2, 40, 0, Math.PI*2, true); 
+		ctx.arc( canvas.width/2, canvas.height/2, 80, 0, Math.PI*2, true); 
 		ctx.stroke();
 	}
 
