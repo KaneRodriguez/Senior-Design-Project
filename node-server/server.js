@@ -43,19 +43,6 @@ app.post('/tracks-update',function(req, res){
 		var speedMotorB = Math.abs(motorBTrack);
 		console.log(tracks);
 
-		// error on arduino side, lets just fix it here. Percentages of 0 will not register
-		// so, add 1 if we are zero
-
-		if(speedMotorA <= 0) {
-			speedMotorA = 1;
-		}
-		if(speedMotorB <= 0) {
-			speedMotorB = 1;
-		}
-
-       
-
-
 		sendMotorUpdate("motorA", speedMotorA, directionMotorA);
 		sendMotorUpdate("motorB", speedMotorB, directionMotorB);
 	}
