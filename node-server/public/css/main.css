@@ -7,11 +7,8 @@ body {
 }
 .arm_controls ul {
 	list-style-type: none;
-	position: relative;
-	top: 10%;
-	left: 0;
-	bottom: 0%;
-	right: 0;
+	width: 100%;
+	margin: 10% auto 0 auto;
 }
 .arm_controls ul li {
 	float: left;

@@ -177,21 +177,23 @@ setInterval(function() {
 // check for connection errors or drops and reconnect
 var reconnectDevice = function () {
   console.log('INITIATING RECONNECT');
-  setTimeout(function(){
+  setTimeout(function() {
     console.log('RECONNECTING TO ARDUINO');
     connectDevice();
   }, 2000);
 };
 
-function sendMotorUpdate(motorId, speed, direction) {
-	if (spDevice != null){
-		spDevice.write('{"id":"' + motorId + '","direction":"' + direction +'","speedPercentage":' + speed +'}');
+function sendMotorUpdate(id, speed, direction) {
+	if (spDevice != null) {
+		var cmd = '{"id":"' + id + '","direction":"' + direction +'","speedPercentage":' + speed +'}';
+		spDevice.write(cmd);	
 	}
 }
 function sendServoMotorUpdate(id, positionPercentage) {
-	if (spDevice != null){
+	if (spDevice != null) {
 	    var cmd = '{"id":"' + id + '","positionPercentage":' + positionPercentage +'}';
 		spDevice.write(cmd);
 	}
 }
+
 

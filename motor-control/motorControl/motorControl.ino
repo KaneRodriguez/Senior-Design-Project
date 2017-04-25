@@ -113,7 +113,6 @@ bool commandReceived() {
     if(strcmp(id,"metald")==0) {
      metald.recieveSerialServoUpdates(root); // todo, pass in the JsonObject to the function
     }
-  Serial.println("Arduino not dead yall! \n");
   return true;
 }
 
