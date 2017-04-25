@@ -121,7 +121,7 @@ function sendServoMotorUpdate(id, positionPercentage) {
 			positionPercentage = (positionPercentage >= 73 ? 73 : (positionPercentage <= 25 ? 25 : positionPercentage ) );
 		}*/
 	    var cmd = '{"id":"' + id + '","positionPercentage":' + positionPercentage +'}';
-		// console.log(cmd);
+		console.log(cmd);
 		serialport.write(cmd);
 }
 /*

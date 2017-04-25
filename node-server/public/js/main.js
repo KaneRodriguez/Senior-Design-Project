@@ -58,80 +58,36 @@ var metald = {
 	positionPercentage: 50
 	};
 
-var interval = null;
+var startString = 'mousedown touchstart';
+var stopSting = 'mouseup mouseleave touchend';
+var myInterval = null;
+assignControlTouchEventHandler('raise_shoulder',shoulder,'increase', startString, stopSting);
+assignControlTouchEventHandler('lower_shoulder',shoulder,'decrease', startString, stopSting);
 
-$('#raise_shoulder').on('mousedown touchstart', function() {
-    interval = setInterval(function() {
-		servoMotorCommand(shoulder,'increase')
-	}, 150);
-}).on('mouseup mouseleave touchend', function() {
-    clearInterval(interval);
-});
-$('#lower_shoulder').on('mousedown touchstart', function() {
-    interval = setInterval(function() {
-		servoMotorCommand(shoulder,'decrease')
-	}, 150);
-}).on('mouseup mouseleave touchend', function() {
-    clearInterval(interval);
-});
-$('#raise_elbow').on('mousedown touchstart', function() {
-    interval = setInterval(function() {
-		servoMotorCommand(elbow,'increase')
-	}, 150);
-}).on('mouseup mouseleave touchend', function() {
-    clearInterval(interval);
-});
-$('#lower_elbow touchstart').on('mousedown', function() {
-    interval = setInterval(function() {
-		servoMotorCommand(elbow,'decrease')
-	}, 150);
-}).on('mouseup mouseleave touchend', function() {
-    clearInterval(interval);
-});
-$('#lower_camx').on('mousedown touchstart', function() {
-    interval = setInterval(function() {
-		servoMotorCommand(camx,'decrease')
-	}, 150);
-}).on('mouseup mouseleave touchend', function() {
-    clearInterval(interval);
-});
-$('#lower_camy').on('mousedown touchstart', function() {
-    interval = setInterval(function() {
-		servoMotorCommand(camy,'decrease')
-	}, 150);
-}).on('mouseup mouseleave touchend', function() {
-    clearInterval(interval);
-});
-$('#raise_camx').on('mousedown touchstart', function() {
-    interval = setInterval(function() {
-		servoMotorCommand(camx,'increase')
-	}, 150);
-}).on('mouseup mouseleave touchend', function() {
-    clearInterval(interval);
-});
-$('#raise_camy').on('mousedown touchstart', function() {
-    interval = setInterval(function() {
-		servoMotorCommand(camy,'increase')
-	}, 150);
-}).on('mouseup mouseleave touchend', function() {
-    clearInterval(interval);
-});
+assignControlTouchEventHandler('raise_elbow',elbow,'increase', startString, stopSting);
+assignControlTouchEventHandler('lower_elbow',elbow,'decrease', startString, stopSting);
 
-$('#open_claw').on('mousedown touchstart', function() {
-	interval = setInterval(function() {
-		servoMotorCommand(claw,'increase')
-	}, 150);
-}).on('mouseup mouseleave touchend', function() {
-	clearInterval(interval);
-});
-$('#close_claw').on('mousedown touchstart', function() {
-	interval = setInterval(function() {
-		servoMotorCommand(claw,'decrease')
-	}, 150);
-}).on('mouseup mouseleave touchend', function() {
-	clearInterval(interval);
-});
+assignControlTouchEventHandler('lower_camx',camx,'decrease', startString, stopSting);
+assignControlTouchEventHandler('lower_camy',camy,'decrease', startString, stopSting);
 
+assignControlTouchEventHandler('raise_camx',camx,'increase', startString, stopSting);
+assignControlTouchEventHandler('raise_camy',camy,'increase', startString, stopSting);
+
+assignControlTouchEventHandler('close_claw',claw,'decrease', startString, stopSting);
+assignControlTouchEventHandler('open_claw',claw,'increase', startString, stopSting);
+
+assignControlTouchEventHandler('lower_md',metald,'decrease', startString, stopSting);
+assignControlTouchEventHandler('raise_md',metald,'increase', startString, stopSting);
+
+function assignControlTouchEventHandler(id, obj, commandType, start, stop) {
+	$('#' + id).on(start, function() {
+	myInterval = setInterval(function() {
+		servoMotorCommand(obj, commandType)
+	}, 150);
+	}).on(stop, function() {
+		clearInterval(myInterval);
+	});
+}
 
 function servoMotorCommand(servoObj, commandType) {
 	var servoStep = 3;
