@@ -35,27 +35,39 @@
 
 var shoulder = {
 	id: 'shoulder',
-	positionPercentage: 50
+	positionPercentage: 50,
+	min: 8,
+	max: 70
 	};
 var claw = {
 	id: 'claw',
-	positionPercentage: 50
+	positionPercentage: 50,
+	min: 0,
+	max: 50
 	};
 var elbow = {
 	id: 'elbow',
-	positionPercentage: 50
+	positionPercentage: 50,
+	min: 0,
+	max: 75
 	};
 var camx = {
 	id: 'camx',
-	positionPercentage: 50
+	positionPercentage: 50,
+	min: 0,
+	max: 72
 	};
 var camy = {
 	id: 'camy',
-	positionPercentage: 50
+	positionPercentage: 50,
+	min: 3,
+	max: 70
 	};
 var metald = {
 	id: 'metald',
-	positionPercentage: 50
+	positionPercentage: 50,
+	min: 0,
+	max: 70
 	};
 
 var startString = 'mousedown touchstart';
@@ -64,13 +76,13 @@ var myInterval = null;
 assignControlTouchEventHandler('raise_shoulder',shoulder,'increase', startString, stopSting);
 assignControlTouchEventHandler('lower_shoulder',shoulder,'decrease', startString, stopSting);
 
-assignControlTouchEventHandler('raise_elbow',elbow,'increase', startString, stopSting);
-assignControlTouchEventHandler('lower_elbow',elbow,'decrease', startString, stopSting);
+assignControlTouchEventHandler('lower_elbow',elbow,'increase', startString, stopSting);
+assignControlTouchEventHandler('raise_elbow',elbow,'decrease', startString, stopSting);
 
-assignControlTouchEventHandler('lower_camx',camx,'decrease', startString, stopSting);
+assignControlTouchEventHandler('raise_camx',camx,'decrease', startString, stopSting);
 assignControlTouchEventHandler('lower_camy',camy,'decrease', startString, stopSting);
 
-assignControlTouchEventHandler('raise_camx',camx,'increase', startString, stopSting);
+assignControlTouchEventHandler('lower_camx',camx,'increase', startString, stopSting);
 assignControlTouchEventHandler('raise_camy',camy,'increase', startString, stopSting);
 
 assignControlTouchEventHandler('close_claw',claw,'decrease', startString, stopSting);
@@ -99,10 +111,10 @@ function servoMotorCommand(servoObj, commandType) {
 		servoObj.positionPercentage = 100;
 	}
 	
-	if ( servoObj.positionPercentage >= 100 ) {
-		servoObj.positionPercentage = 100;
-	} else if ( servoObj.positionPercentage <= 0) {
-		servoObj.positionPercentage = 0;
+	if ( servoObj.positionPercentage >= servoObj.max ) {
+		servoObj.positionPercentage = servoObj.max;
+	} else if ( servoObj.positionPercentage <= servoObj.min) {
+		servoObj.positionPercentage = servoObj.min;
 	}
 	
 	console.log(servoObj);

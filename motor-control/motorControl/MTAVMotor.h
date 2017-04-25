@@ -123,6 +123,7 @@ void MTAVMotor::updateMotor() {
     digitalWrite(this->itsLpwm, HIGH); // forward
     analogWrite(this->itsRpwm, speed);  
   }
+  
 }
 void MTAVMotor::displayMotorSpecs() {
   Serial.println("Motor Id: " + this->getMotorId());
@@ -187,7 +188,7 @@ bool MTAVMotor::recieveSerialMotorUpdates(JsonObject& root) {
   this->setMotorDirection(direction);
   this->setMotorSpeedPercentage(speedPercentage);
   // this->sendSerialMotorSpecs();
-
+  
   return true;
 }
 #endif

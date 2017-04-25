@@ -69,8 +69,6 @@ MTAVServo::MTAVServo(String id, int boardNumber, int positionPercentage, Adafrui
   int difference = this->getMax() - this->getMin(); //MAX_MTAVSERVO_POSITION - MIN_MTAVSERVO_POSITION;
   int pos = this->getServoPositionPercentage() * difference / 100 + this->getMin(); //MIN_MTAVSERVO_POSITION;
   this->setCurrentPos(pos);
-
-  
 }
 
 void MTAVServo::setServoId(String id) {
@@ -92,20 +90,8 @@ void MTAVServo::updateServo() {
 
   // quickly turn the percentage into actual value
   int difference = this->getMax() - this->getMin(); //MAX_MTAVSERVO_POSITION - MIN_MTAVSERVO_POSITION;
-  int pos = this->getServoPositionPercentage() * difference / 100 + this->getMin(); //MIN_MTAVSERVO_POSITION;
-
-  if ( pos > this->getCurrentPos() ) {
-      // we are going up!
-        for (uint16_t pulselen = this->getCurrentPos(); pulselen < pos; pulselen++) {
-          this->controller->setPWM(this->getBoardNumber(), 0, pulselen); // TODO: Why 0?????????
-        }
-  } else if ( pos < this->getCurrentPos() ) {
-      // we are going down!!
-        for (uint16_t pulselen = this->getCurrentPos(); pulselen > pos; pulselen--) {
-          this->controller->setPWM(this->getBoardNumber(), 0, pulselen); // TODO: Why 0?????????
-        }
-  }
-  this->setCurrentPos(pos);  
+  uint16_t pos = this->getServoPositionPercentage() * difference / 100 + this->getMin(); //MIN_MTAVSERVO_POSITION;
+  this->controller->setPWM(this->getBoardNumber(), 0, pos); // TODO: Why 0?????????
 }
 
 void MTAVServo::displayServoSpecs() {
@@ -141,6 +127,7 @@ bool MTAVServo::recieveSerialServoUpdates(JsonObject& root) {
   this->setServoPositionPercentage(positionPercentage);
   // this->sendSerialServoSpecs();
 
+  this->updateServo();
   return true;
 }
 #endif

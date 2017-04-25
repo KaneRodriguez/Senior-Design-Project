@@ -6,17 +6,20 @@
 #include "MTAVMotor.h"
 #include "MTAVServo.h"
 
+#define SERVOMIN  150 // this is the 'minimum' pulse length count (out of 4096)
+#define SERVOMAX  600 // this is the 'maximum' pulse length count (out of 4096)
+
 MTAVMotor motorA("motorA", "forward", 0);
 MTAVMotor motorB("motorB", "forward", 0);
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
-MTAVServo claw("claw", 0, 0, &pwm, 150, 600);
-MTAVServo elbow("elbow", 1, 0, &pwm, 150, 600);
-MTAVServo shoulder("shoulder", 2, 0, &pwm, 150, 600);
-MTAVServo camx("camx", 3, 0, &pwm, 150, 600);
-MTAVServo camy("camy", 4, 0, &pwm, 150, 600);
-MTAVServo metald("metald", 5, 0, &pwm, 150, 600);          
+MTAVServo claw("claw", 0, 50, &pwm, SERVOMIN, SERVOMAX);
+MTAVServo elbow("elbow", 1, 50, &pwm, SERVOMIN, SERVOMAX);
+MTAVServo shoulder("shoulder", 2, 50, &pwm, SERVOMIN, SERVOMAX);
+MTAVServo camx("camx", 3, 50, &pwm, SERVOMIN, SERVOMAX);
+MTAVServo camy("camy", 4, 50, &pwm, SERVOMIN, SERVOMAX);
+MTAVServo metald("metald", 8, 50, &pwm, SERVOMIN, SERVOMAX);          
 
 /*Parallax servos are : 90-400
   micro servos are    : 120-420
@@ -46,12 +49,6 @@ void setup() {
   motorA.updateMotor();
   motorB.updateMotor();
 
-  claw.updateServo();
-  elbow.updateServo();
-  shoulder.updateServo();
-  camx.updateServo();
-  camy.updateServo();
-  metald.updateServo();
 
   // reserve 200 bytes for the userCommand (consider lowering):
   userCommand.reserve(200);
@@ -67,19 +64,8 @@ void setup() {
 /**************************** Main **********************************/
 
 void loop() { // main
-
-  // update motors
   motorA.updateMotor();
   motorB.updateMotor();
-  // update servos
-  
-  claw.updateServo();
-  elbow.updateServo();
-  shoulder.updateServo();
-  camx.updateServo();
-  camy.updateServo();
-  metald.updateServo();
-
 }
 
 /**************************** End Main **********************************/
@@ -127,7 +113,7 @@ bool commandReceived() {
     if(strcmp(id,"metald")==0) {
      metald.recieveSerialServoUpdates(root); // todo, pass in the JsonObject to the function
     }
-
+  Serial.println("Arduino not dead yall! \n");
   return true;
 }
 
