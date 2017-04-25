@@ -101,40 +101,97 @@ app.listen(80, '0.0.0.0', function () {
 ***************************************************/
 
 var SerialPort = require("serialport");
-var serialport = new SerialPort("/dev/ttyACM0", {
-  parser: SerialPort.parsers.readline('\n')
-});
-serialport.on('open', function(){
-  console.log('Serial Port Opened');
-  serialport.on('data', function(data){
-			 console.log("data received:" + data);
-	});
-});
+var spDevice = null;
+var i = 1;
+// setting up the serial connection
+var connectDevice = function() {
+    //---------------------------------------
+SerialPort.list(function (err, ports) {
+	  if( ports != undefined ) {
+		  var port = null;  
+			
+		  var found = ports.some(function(p, index, array) {
+			if(p != undefined) {
+				console.log(p.comName);
+				console.log(p.pnpId);
+				console.log(p.manufacturer);
+				if(p.comName == '/dev/ttyACM0')
+					{
+						port = p;
+						return true;    
+					}
+			}
+
+			return false;
+		  });
+
+
+		  if(found)
+		  {
+			spDevice = new SerialPort(port.comName.replace("cu","tty"), {
+				baudrate: 9600,
+				parser: SerialPort.parsers.readline("\n"),
+				disconnectedCallback: function() {console.log('You pulled the plug!');}         
+			});         
+			if( spDevice != undefined && spDevice != null) {
+				// do something with incoming data
+				spDevice.on('data', function (data) {
+					 console.log('count : ' + (i++));
+					console.log('data received: ' + data);
+				});
+
+				spDevice.on('close', function(){
+					console.log('ARDUINO PORT CLOSED');
+					spDevice = null;
+					reconnectDevice();
+				});
+
+				spDevice.on('error', function (err) {
+					console.log("ERROR");
+					spDevice = null;
+					console.error("error", err);
+					reconnectDevice();
+				});
+
+				spDevice.on('disconnected', function (err) {
+					console.log('on.disconnect');
+					spDevice = null;
+					reconnectDevice();
+				}); 
+			}
+		  }
+		  else
+		  {   
+			setTimeout(connectDevice, 1000);
+		  }      
+	  } 
+    });
+    //---------------------------------------
+}
+connectDevice();
+/*** testing function
+setInterval(function() {
+	sendMotorUpdate("motorA",20,"forward");
+}, 1000);
+***/
+// check for connection errors or drops and reconnect
+var reconnectDevice = function () {
+  console.log('INITIATING RECONNECT');
+  setTimeout(function(){
+    console.log('RECONNECTING TO ARDUINO');
+    connectDevice();
+  }, 2000);
+};
+
 function sendMotorUpdate(motorId, speed, direction) {
-		serialport.write('{"id":"' + motorId + '","direction":"' + direction +'","speedPercentage":' + speed +'}');
+	if (spDevice != null){
+		spDevice.write('{"id":"' + motorId + '","direction":"' + direction +'","speedPercentage":' + speed +'}');
+	}
 }
 function sendServoMotorUpdate(id, positionPercentage) {
-		/*if ( id == 'shoulder' ) {
-			positionPercentage = (positionPercentage >= 90 ? 90 : (positionPercentage <= 20 ? 20 : positionPercentage ) );
-		}
-		if ( id == 'claw' ) {
-			positionPercentage = (positionPercentage >= 73 ? 73 : (positionPercentage <= 25 ? 25 : positionPercentage ) );
-		}*/
+	if (spDevice != null){
 	    var cmd = '{"id":"' + id + '","positionPercentage":' + positionPercentage +'}';
-		console.log(cmd);
-		serialport.write(cmd);
-}
-/*
-var tmpVal = 5;
-setInterval(function() {
-	if(tmpVal > 30) {
-		tmpVal = 5;
-	} else {
-		tmpVal= tmpVal + 4;
+		spDevice.write(cmd);
 	}
-	console.log(tmpVal);
-	sendMotorUpdate('motorB', tmpVal, 'forward');
-	sendMotorUpdate('motorA', tmpVal, 'forward');
-}, 3000);
-*/
-// {"id":"motorB","direction":"forward","speedPercentage":9}
+}
+

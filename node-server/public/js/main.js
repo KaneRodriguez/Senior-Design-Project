@@ -7,23 +7,17 @@
 		ctx.fillText('Loading...', videoCanvas.width/2-30, videoCanvas.height/3);
 
 
-
-
 		// Setup the WebSocket connection and start the player
 		var client = new WebSocket('ws://doesitreallymatter.com:8084/');
 		var player = new jsmpeg(client, {canvas:videoCanvas});
 
-		
 
 /******* End Video Stuff ****/
 
 /******* Servo Stuff ****/
 
 /**
-			id
-				*	 - positionPercentage
-			
-			* 
+
 			* claw
 			* elbow
 			* shoulder
@@ -31,7 +25,6 @@
 			* camy
 			* metald
 */
-// just to keep track of where everythings at for now
 
 var shoulder = {
 	id: 'shoulder',
@@ -73,6 +66,7 @@ var metald = {
 var startString = 'mousedown touchstart';
 var stopSting = 'mouseup mouseleave touchend';
 var myInterval = null;
+
 assignControlTouchEventHandler('raise_shoulder',shoulder,'increase', startString, stopSting);
 assignControlTouchEventHandler('lower_shoulder',shoulder,'decrease', startString, stopSting);
 
