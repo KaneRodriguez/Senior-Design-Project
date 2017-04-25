@@ -191,7 +191,9 @@ function sendMotorUpdate(id, speed, direction) {
 }
 function sendServoMotorUpdate(id, positionPercentage) {
 	if (spDevice != null) {
+		
 	    var cmd = '{"id":"' + id + '","positionPercentage":' + positionPercentage +'}';
+		console.log(cmd);
 		spDevice.write(cmd);
 	}
 }

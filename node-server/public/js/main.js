@@ -85,6 +85,14 @@ assignControlTouchEventHandler('open_claw',claw,'increase', startString, stopSti
 assignControlTouchEventHandler('lower_md',metald,'decrease', startString, stopSting);
 assignControlTouchEventHandler('raise_md',metald,'increase', startString, stopSting);
 
+
+$("#arm_front").on('click', function() {
+	servoMotorCommand(shoulder, 'arm_front');
+});
+$("#arm_back").on('click', function() {
+	servoMotorCommand(shoulder, 'arm_back');
+});
+
 function assignControlTouchEventHandler(id, obj, commandType, start, stop) {
 	$('#' + id).on(start, function() {
 	myInterval = setInterval(function() {
@@ -104,22 +112,63 @@ function servoMotorCommand(servoObj, commandType) {
 	} else if ( commandType == 'straight' ) {
 		servoObj.positionPercentage = 100;
 	}
-	
-	if ( servoObj.positionPercentage >= servoObj.max ) {
-		servoObj.positionPercentage = servoObj.max;
-	} else if ( servoObj.positionPercentage <= servoObj.min) {
-		servoObj.positionPercentage = servoObj.min;
+	if( commandType == "arm_front") {
+		// make shoulder go 14
+		// make elbow go 56
+		shoulder.positionPercentage = 14;
+		elbow.positionPercentage = 56;
+;		$.ajax({
+				url: '/servo-update',
+				type: 'POST',
+				data: {
+				servoMotor: shoulder
+				}
+		});
+		$.ajax({
+				url: '/servo-update',
+				type: 'POST',
+				data: {
+				servoMotor: elbow
+				}
+		});
+		
+	} else if ( commandType == "arm_back" ) {
+		// make shoulder go 70
+		// make elbow go 57
+		shoulder.positionPercentage = 70;
+		elbow.positionPercentage = 57;
+;		$.ajax({
+				url: '/servo-update',
+				type: 'POST',
+				data: {
+				servoMotor: shoulder
+				}
+		});
+		$.ajax({
+				url: '/servo-update',
+				type: 'POST',
+				data: {
+				servoMotor: elbow
+				}
+		});yy
+		
+	} else {
+		if ( servoObj.positionPercentage >= servoObj.max ) {
+			servoObj.positionPercentage = servoObj.max;
+		} else if ( servoObj.positionPercentage <= servoObj.min) {
+			servoObj.positionPercentage = servoObj.min;
+		}
+		
+		console.log(servoObj);
+		// send via ajax
+		$.ajax({
+				url: '/servo-update',
+				type: 'POST',
+				data: {
+				servoMotor: servoObj
+				}
+		});
 	}
-	
-	console.log(servoObj);
-	// send via ajax
-	$.ajax({
-			url: '/servo-update',
-			type: 'POST',
-			data: {
-			servoMotor: servoObj
-			}
-	});
 }
 
 /******* End Servo Stuff ****/
