@@ -17,6 +17,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //tell express that www is the root of our public web folder
 app.use(express.static(path.join(__dirname, 'public')));
 
+/******************** MODS *****************************/
+
+var ignoreMotors = false; // change to true to ignore motors
+			  // and forego setting up motor connections
+
+/******************** MODS *****************************/
+
 //tell express what to do when the /form route is requested
 app.post('/tracks-update',function(req, res){
 	res.setHeader('Content-Type', 'application/json');
@@ -31,7 +38,7 @@ app.post('/tracks-update',function(req, res){
 	}, 1); //remove in future?
 
 	// feel free to toggle which is left and which is right
-	if(tracks) {
+	if(tracks && !ignoreMotors) {
 		var motorATrack = tracks.left; // switch right and left if things look wierd
 		var motorBTrack = tracks.right;
 
@@ -71,7 +78,7 @@ app.post('/servo-update',function(req, res){
 
 	}, 1); //remove in future?
 
-	if(servoMotor) {
+	if(servoMotor && !ignoreMotors) {
 		var id = servoMotor.id; 
 		var positionPercentage = servoMotor.positionPercentage;
 
@@ -99,103 +106,104 @@ app.listen(80, '0.0.0.0', function () {
 	Connection to Arduino
 
 ***************************************************/
+if(!ignoreMotors)
+{
+	
+	var SerialPort = require("serialport");
+	var spDevice = null;
+	var i = 1;
+	// setting up the serial connection
+	var connectDevice = function() {
+	    //---------------------------------------
+	SerialPort.list(function (err, ports) {
+		  if( ports != undefined ) {
+			  var port = null;  
 
-var SerialPort = require("serialport");
-var spDevice = null;
-var i = 1;
-// setting up the serial connection
-var connectDevice = function() {
-    //---------------------------------------
-SerialPort.list(function (err, ports) {
-	  if( ports != undefined ) {
-		  var port = null;  
-			
-		  var found = ports.some(function(p, index, array) {
-			if(p != undefined) {
-				console.log(p.comName);
-				console.log(p.pnpId);
-				console.log(p.manufacturer);
-				if(p.comName == '/dev/ttyACM0')
-					{
-						port = p;
-						return true;    
-					}
-			}
+			  var found = ports.some(function(p, index, array) {
+				if(p != undefined) {
+					console.log(p.comName);
+					console.log(p.pnpId);
+					console.log(p.manufacturer);
+					if(p.comName == '/dev/ttyACM0')
+						{
+							port = p;
+							return true;    
+						}
+				}
 
-			return false;
-		  });
+				return false;
+			  });
 
 
-		  if(found)
-		  {
-			spDevice = new SerialPort(port.comName.replace("cu","tty"), {
-				baudrate: 9600,
-				parser: SerialPort.parsers.readline("\n"),
-				disconnectedCallback: function() {console.log('You pulled the plug!');}         
-			});         
-			if( spDevice != undefined && spDevice != null) {
-				// do something with incoming data
-				spDevice.on('data', function (data) {
-					 console.log('count : ' + (i++));
-					console.log('data received: ' + data);
-				});
+			  if(found)
+			  {
+				spDevice = new SerialPort(port.comName.replace("cu","tty"), {
+					baudrate: 9600,
+					parser: SerialPort.parsers.readline("\n"),
+					disconnectedCallback: function() {console.log('You pulled the plug!');}         
+				});         
+				if( spDevice != undefined && spDevice != null) {
+					// do something with incoming data
+					spDevice.on('data', function (data) {
+						 console.log('count : ' + (i++));
+						console.log('data received: ' + data);
+					});
 
-				spDevice.on('close', function(){
-					console.log('ARDUINO PORT CLOSED');
-					spDevice = null;
-					reconnectDevice();
-				});
+					spDevice.on('close', function(){
+						console.log('ARDUINO PORT CLOSED');
+						spDevice = null;
+						reconnectDevice();
+					});
 
-				spDevice.on('error', function (err) {
-					console.log("ERROR");
-					spDevice = null;
-					console.error("error", err);
-					reconnectDevice();
-				});
+					spDevice.on('error', function (err) {
+						console.log("ERROR");
+						spDevice = null;
+						console.error("error", err);
+						reconnectDevice();
+					});
 
-				spDevice.on('disconnected', function (err) {
-					console.log('on.disconnect');
-					spDevice = null;
-					reconnectDevice();
-				}); 
-			}
-		  }
-		  else
-		  {   
-			setTimeout(connectDevice, 1000);
-		  }      
-	  } 
-    });
-    //---------------------------------------
-}
-connectDevice();
-/*** testing function
-setInterval(function() {
-	sendMotorUpdate("motorA",20,"forward");
-}, 1000);
-***/
-// check for connection errors or drops and reconnect
-var reconnectDevice = function () {
-  console.log('INITIATING RECONNECT');
-  setTimeout(function() {
-    console.log('RECONNECTING TO ARDUINO');
-    connectDevice();
-  }, 2000);
-};
+					spDevice.on('disconnected', function (err) {
+						console.log('on.disconnect');
+						spDevice = null;
+						reconnectDevice();
+					}); 
+				}
+			  }
+			  else
+			  {   
+				setTimeout(connectDevice, 1000);
+			  }      
+		  } 
+	    });
+	    //---------------------------------------
+	}
+	connectDevice();
+	/*** testing function
+	setInterval(function() {
+		sendMotorUpdate("motorA",20,"forward");
+	}, 1000);
+	***/
+	// check for connection errors or drops and reconnect
+	var reconnectDevice = function () {
+	  console.log('INITIATING RECONNECT');
+	  setTimeout(function() {
+	    console.log('RECONNECTING TO ARDUINO');
+	    connectDevice();
+	  }, 2000);
+	};
 
-function sendMotorUpdate(id, speed, direction) {
-	if (spDevice != null) {
-		var cmd = '{"id":"' + id + '","direction":"' + direction +'","speedPercentage":' + speed +'}';
-		spDevice.write(cmd);	
+	function sendMotorUpdate(id, speed, direction) {
+		if (spDevice != null) {
+			var cmd = '{"id":"' + id + '","direction":"' + direction +'","speedPercentage":' + speed +'}';
+			spDevice.write(cmd);	
+		}
+	}
+	function sendServoMotorUpdate(id, positionPercentage) {
+		if (spDevice != null) {
+
+		    var cmd = '{"id":"' + id + '","positionPercentage":' + positionPercentage +'}';
+			console.log(cmd);
+			spDevice.write(cmd);
+		}
 	}
 }
-function sendServoMotorUpdate(id, positionPercentage) {
-	if (spDevice != null) {
-		
-	    var cmd = '{"id":"' + id + '","positionPercentage":' + positionPercentage +'}';
-		console.log(cmd);
-		spDevice.write(cmd);
-	}
-}
-
-
